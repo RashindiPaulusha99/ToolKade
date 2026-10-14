@@ -3,4 +3,6 @@ dist/
 node_modules/
 package-lock.json
 *.md
+# Prettier's MDX parser is MDX v1 and corrupts MDX 3 comments ({/* */}), so posts are formatted by hand.
+*.mdx
 README.txt

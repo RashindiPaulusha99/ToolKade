@@ -1,0 +1,16 @@
+---
+import ratesJson from '@/data/rates/vehicle-duty.json';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import type { RatesFile } from '@/lib/rates';
+import { getTool } from '@/lib/tools';
+import type { VehicleDutyRates } from '@/tools/vehicle-import-duty-calculator/logic';
+import Tool from '@/tools/vehicle-import-duty-calculator/Tool';
+import { content } from '@/tools/vehicle-import-duty-calculator/content';
+
+const tool = getTool('vehicle-import-duty-calculator')!;
+const rates = ratesJson as RatesFile<VehicleDutyRates>;
+---
+
+<ToolLayout tool={tool} content={content} rates={rates}>
+  <Tool client:visible rates={rates.data} />
+</ToolLayout>

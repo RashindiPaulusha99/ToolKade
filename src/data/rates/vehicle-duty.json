@@ -1,0 +1,21 @@
+{
+  "name": "Vehicle import duties and taxes (passenger cars, SUVs and vans)",
+  "source": "https://www.customs.gov.lk/",
+  "effectiveFrom": "TODO",
+  "lastVerified": "TODO",
+  "notes": "TODO(verify): data is null until every figure is transcribed from the current Gazette Extraordinary and Sri Lanka Customs. Third-party calculators disagree on almost every rate (customs duty quoted as 20%, 30%, 45% and 100%; EV excise quoted as 0% and per-kW), so none of them may be used as a source. Structure of `data`: see the VehicleDutyRates type in src/tools/vehicle-import-duty-calculator/logic.ts; it is validated by schema.ts in the same folder.",
+  "todo": [
+    "Customs Import Duty (CID): rate and what it is charged on (CIF?) for HS 8703 passenger vehicles and for vans.",
+    "Surcharge on customs duty: rate, and whether it is still in force (and any exemptions, e.g. by letter-of-credit date).",
+    "Excise duty tables (Excise (Special Provisions) Act gazette): for each vehicle type and fuel type (petrol, diesel, petrol hybrid, diesel hybrid, electric): capacity bands (cc, or kW for EVs), age bands, and the per-unit rate and/or ad valorem rate (and any 'whichever is higher' rule or minimum).",
+    "Hybrid vehicles: whether excise depends on engine cc, motor kW or battery capacity (news reports mention motor type and battery capacity).",
+    "Luxury tax: thresholds per fuel type, the rate, and whether it applies to the excess over the threshold or the whole CIF.",
+    "Social Security Contribution Levy (SSCL): rate and base (CIF uplift percentage, and which duties are included).",
+    "VAT: rate and base (CIF uplift percentage, and which duties are included).",
+    "Port and Airport Development Levy (PAL): rate, and whether passenger vehicles are exempt.",
+    "Vehicle Entitlement Levy (VEL) or other fixed charges: amounts and whether they vary by capacity.",
+    "Maximum vehicle age allowed for import (years) and how age is counted (manufacture date vs. bill of lading / shipment date).",
+    "The official source URL(s) (gazette numbers), the effective date, and today's verification date."
+  ],
+  "data": null
+}

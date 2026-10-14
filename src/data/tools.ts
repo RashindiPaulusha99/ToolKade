@@ -7,12 +7,12 @@ export interface ToolMeta {
   name: string; // "Vehicle Import Duty Calculator"
   shortName?: string; // shorter label for menus
   category: CategoryId;
-  title: string; // SEO title without the " | ToolKade" suffix; full title â‰¤ 60 chars
-  description: string; // meta description, 120â€“155 chars
+  title: string; // SEO title without the " | ToolKade" suffix; full title Ã¢â€°Â¤ 60 chars
+  description: string; // meta description, 120Ã¢â‚¬â€œ155 chars
   keywords: string[]; // target search terms (planning only, not a meta tag)
   icon: string; // lucide icon name (PascalCase)
   blogSlug?: string; // companion blog post
-  related: string[]; // 3â€“4 related tool slugs
+  related: string[]; // 3Ã¢â‚¬â€œ4 related tool slugs
   status: ToolStatus;
   ratesFile?: string; // e.g. "vehicle-duty.json"
   publishedAt: string; // ISO date
@@ -40,7 +40,7 @@ export const tools: ToolMeta[] = [
     icon: 'Car',
     blogSlug: 'how-vehicle-import-duty-is-calculated-in-sri-lanka',
     related: ['loan-emi-calculator', 'salary-apit-calculator', 'electricity-bill-calculator'],
-    status: 'coming-soon',
+    status: 'live',
     ratesFile: 'vehicle-duty.json',
     publishedAt: '2026-10-14',
     updatedAt: '2026-10-14',

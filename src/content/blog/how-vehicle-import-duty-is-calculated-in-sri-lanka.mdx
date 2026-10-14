@@ -1,0 +1,114 @@
+---
+title: 'How Vehicle Import Duty Is Calculated in Sri Lanka (2026 Guide)'
+description: 'Learn how Sri Lanka Customs works out vehicle import duty: CIF value, customs duty, excise, luxury tax, SSCL and VAT, step by step with a worked example.'
+tool: vehicle-import-duty-calculator
+category: sri-lanka
+publishDate: 2026-10-14
+updatedDate: 2026-10-14
+author: 'ToolKade Team'
+tags: ['vehicle import', 'import duty', 'excise duty', 'sri lanka customs']
+faqs:
+  - q: 'Is import duty charged on the price I paid or on the CIF value?'
+    a: 'On the CIF value: the price of the vehicle plus insurance and freight to Sri Lanka, converted to rupees at the exchange rate Customs uses on the day of clearance. That is why shipping costs and the exchange rate both affect your duty.'
+  - q: 'Why is excise duty usually the biggest part of the bill?'
+    a: 'Excise duty is set per cc of engine capacity (or per kW of motor power for electric vehicles), and the rates for passenger vehicles are high. Because VAT and SSCL are then charged on a base that includes excise, a larger excise figure also increases those taxes.'
+  - q: 'Does a bigger engine always mean more duty?'
+    a: 'Almost always. Excise rates are set in engine capacity bands, and both the band and the rate per cc go up as the engine gets bigger. A small increase in capacity can push a vehicle into a much more expensive band.'
+  - q: 'Where can I check the official rates?'
+    a: 'Vehicle excise rates are published by gazette under the Excise (Special Provisions) Act, and Sri Lanka Customs publishes its tariff and notices on customs.gov.lk. A licensed clearing agent can also confirm the figures for a specific vehicle.'
+draft: true
+---
+
+{/* TODO(human review before publishing): (1) fill in the worked example table with figures from src/data/rates/vehicle-duty.json once the rates are verified; (2) add the gazette number(s) and links in "Where the rates come from"; (3) add a real local example if you have one, then remove draft: true. */}
+
+Planning to import a car, SUV, hybrid or EV? The price on the Japanese auction sheet is only the start. By the time the vehicle leaves the port, taxes can add more than the vehicle itself costs. This guide explains how **vehicle import duty in Sri Lanka** is calculated, step by step, so you can understand every line of the bill. To get an estimate for a specific vehicle, use our [vehicle import duty calculator](/tools/vehicle-import-duty-calculator/).
+
+## The starting point: the CIF value
+
+Every duty and tax starts from the **CIF value**. CIF stands for:
+
+- **Cost**: the price you pay for the vehicle
+- **Insurance**: the cost of insuring it during shipping
+- **Freight**: the cost of shipping it to a Sri Lankan port
+
+Customs converts the CIF value to rupees using its official exchange rate on the day the vehicle is cleared. This matters: if the rupee weakens between the day you buy the vehicle and the day it arrives, your duty goes up even though the vehicle price has not changed.
+
+## How vehicle import duty is calculated, step by step
+
+Sri Lanka charges several different taxes on an imported vehicle. They are calculated **in order**, because most of the later taxes are charged on top of the earlier ones.
+
+### 1. Customs import duty
+
+Customs import duty (often called CID) is a percentage of the CIF value. Depending on the rules in force, a **surcharge** may be added, calculated as a percentage of the customs duty itself.
+
+### 2. Excise duty
+
+Excise duty is usually the largest single tax on a passenger vehicle. It is set by gazette, separately for each fuel type, and depends on:
+
+- **Engine capacity** in cubic centimetres (cc) for petrol, diesel and most hybrid vehicles
+- **Motor power** in kilowatts (kW) for electric vehicles
+- **The age of the vehicle**, because rates are set in age bands
+
+Excise is often expressed as a fixed amount of rupees **per cc** (or per kW). Some bands may instead use a percentage of the value, or charge whichever of the two is higher.
+
+### 3. Luxury tax
+
+Higher-value vehicles can also pay a **luxury tax**. It applies only when the CIF value is above a threshold, and the threshold can differ between petrol, diesel, hybrid and electric vehicles. Depending on the rule, it is charged on the amount above the threshold or on the whole value.
+
+### 4. SSCL and VAT
+
+The **Social Security Contribution Levy (SSCL)** and **Value Added Tax (VAT)** come last. Each is a percentage of a base that is usually made up of the CIF value (often uplifted by a set percentage) plus the duties already charged. This means VAT is effectively charged partly on other taxes, which is one reason the total adds up so quickly.
+
+### 5. Fixed levies
+
+Some charges are a fixed amount per vehicle rather than a percentage. Check the current rules for any levies that apply to your vehicle type.
+
+## A worked example
+
+Let's follow one vehicle through every step. Suppose you are importing a **petrol car with a 1,490 cc engine, made last year**, and the CIF value converts to **Rs. 6,000,000**.
+
+{/* TODO: replace each [rate] and "TODO" amount with the verified figures from vehicle-duty.json. */}
+
+| Step | How it is calculated                                                      | Amount |
+| ---- | ------------------------------------------------------------------------- | ------ |
+| 1    | Customs duty: [CID rate] × Rs. 6,000,000                                  | TODO   |
+| 2    | Surcharge: [surcharge rate] × customs duty                                | TODO   |
+| 3    | Excise duty: [rate per cc for this capacity and age band] × 1,490 cc      | TODO   |
+| 4    | Luxury tax: only if Rs. 6,000,000 is above the petrol threshold           | TODO   |
+| 5    | SSCL: [SSCL rate] × (CIF with uplift + customs duty + surcharge + excise) | TODO   |
+| 6    | VAT: [VAT rate] × (CIF with uplift + customs duty + surcharge + excise)   | TODO   |
+| 7    | Fixed levies                                                              | TODO   |
+|      | **Total taxes**                                                           | TODO   |
+|      | **Estimated landed cost** (CIF + total taxes)                             | TODO   |
+
+Notice how steps 5 and 6 are charged on a base that already includes steps 1 to 3. Excise drives the whole bill: a higher excise figure also raises SSCL and VAT.
+
+<ToolCTA slug="vehicle-import-duty-calculator" label="Estimate your vehicle's duty" />
+
+## Common mistakes to avoid
+
+**Using the auction price instead of the CIF value.** Insurance and freight are part of the value that duty is charged on. Leaving them out makes your estimate too low.
+
+**Forgetting about the exchange rate.** A few rupees' movement in the yen or dollar rate changes the CIF value in rupees, and every percentage-based tax moves with it. Use the current Central Bank rate and leave yourself a margin.
+
+**Entering the wrong engine capacity.** Excise bands have hard edges. A vehicle just under a band limit and one just over it can pay very different rates. Use the exact figure from the export certificate.
+
+**Ignoring the vehicle's age.** Excise rates depend on age, and there may be a maximum age for imports. Check the year of manufacture before you commit.
+
+**Choosing the wrong fuel type.** Petrol, diesel, hybrid and electric vehicles each have their own tables and luxury tax thresholds. A hybrid entered as a petrol car will give the wrong answer.
+
+**Treating the estimate as the final bill.** Clearing agent fees, port and handling charges, and registration costs come on top of the taxes. Budget for them separately.
+
+## Where the rates come from
+
+Vehicle excise rates are set by gazette under the Excise (Special Provisions) Act, and customs duty, surcharges and levies are set by the government and administered by [Sri Lanka Customs](https://www.customs.gov.lk/). These rates change often, sometimes with very little notice.
+
+{/* TODO: add the current gazette number(s) and links here. */}
+
+Our calculator keeps every rate in a single data file that records the official source and the date it was last checked, and shows that date on the calculator page. If you spot a rate that has changed, please [let us know](/contact/).
+
+## Conclusion
+
+Vehicle import duty in Sri Lanka builds up in layers: customs duty and any surcharge on the CIF value, excise based on engine size and age, luxury tax on expensive vehicles, and finally SSCL and VAT charged on top of everything before them. Understanding that order makes it much easier to see why two similar-looking vehicles can have very different bills.
+
+Before you buy, run the numbers with our [vehicle import duty calculator](/tools/vehicle-import-duty-calculator/), then confirm the figures with Sri Lanka Customs or a licensed clearing agent. You can also browse our other [Sri Lanka calculators](/tools/sri-lanka/) for salary, tax and household costs.

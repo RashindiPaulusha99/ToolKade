@@ -8,6 +8,8 @@ export interface RatesFile<T = unknown> {
   effectiveFrom: string;
   lastVerified: string;
   notes?: string;
+  /** What still needs verifying against the official source while `data` is null. */
+  todo?: string[];
   data: T | null;
 }
 
