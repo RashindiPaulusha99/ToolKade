@@ -1,0 +1,28 @@
+---
+import Badge from '@/components/ui/Badge.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { bodyClass, h1Class } from '@/components/ui/styles';
+import type { ToolMeta } from '@/data/tools';
+
+interface Props {
+  tool: ToolMeta;
+  intro: string;
+}
+
+const { tool, intro } = Astro.props;
+const fileTool = tool.category === 'image' || tool.category === 'pdf';
+---
+
+<header class="max-w-3xl">
+  <div class="flex flex-wrap items-center gap-3">
+    <h1 class={h1Class}>{tool.name}</h1>
+    {tool.status === 'beta' && <Badge>Beta</Badge>}
+  </div>
+  <p class:list={[bodyClass, 'mt-3 text-lg']}>{intro}</p>
+  <p class="mt-3 inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+    <Icon name="ShieldCheck" class="size-5 text-brand-600 dark:text-brand-300" />
+    {fileTool
+      ? 'Your files never leave your device.'
+      : 'Runs in your browser. Nothing you enter is sent anywhere.'}
+  </p>
+</header>

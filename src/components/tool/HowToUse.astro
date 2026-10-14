@@ -1,0 +1,29 @@
+---
+import { bodyClass, h2Class } from '@/components/ui/styles';
+
+interface Props {
+  toolName: string;
+  steps: string[];
+}
+
+const { toolName, steps } = Astro.props;
+---
+
+<section aria-labelledby="how-to-use">
+  <h2 id="how-to-use" class={h2Class}>
+    How to use the {toolName}
+  </h2>
+  <ol class="mt-4 space-y-3">
+    {steps.map((step, index) => (
+      <li class="flex gap-3">
+        <span
+          class="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-semibold text-white"
+          aria-hidden="true"
+        >
+          {index + 1}
+        </span>
+        <span class={bodyClass}>{step}</span>
+      </li>
+    ))}
+  </ol>
+</section>

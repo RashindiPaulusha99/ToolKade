@@ -1,0 +1,100 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { collectionPageSchema } from '@/components/seo/schema';
+import ToolGrid from '@/components/tool/ToolGrid.astro';
+import Icon from '@/components/ui/Icon.astro';
+import {
+  bodyClass,
+  cardClass,
+  cardLinkClass,
+  cn,
+  containerClass,
+  h1Class,
+  h2Class,
+} from '@/components/ui/styles';
+import { categories, type Category } from '@/data/categories';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+  categoryHasPublishedTools,
+  categoryUrl,
+  getToolsByCategory,
+  isPublished,
+  toolUrl,
+} from '@/lib/tools';
+
+export const getStaticPaths = (() =>
+  categories.map((category) => ({
+    params: { category: category.id },
+    props: { category },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const tools = getToolsByCategory(category.id);
+const published = tools.filter(isPublished);
+const otherCategories = categories.filter((c) => c.id !== category.id);
+---
+
+<BaseLayout
+  title={category.title}
+  description={category.description}
+  noindex={!categoryHasPublishedTools(category.id)}
+  jsonLd={[
+    collectionPageSchema({
+      name: category.name,
+      description: category.description,
+      path: categoryUrl(category.id),
+      items: published.map((tool) => ({ name: tool.name, path: toolUrl(tool.slug) })),
+    }),
+  ]}
+>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs
+      items={[
+        { name: 'Tools', href: '/tools/' },
+        { name: category.name, href: categoryUrl(category.id) },
+      ]}
+    />
+    <header class="mt-6 max-w-3xl">
+      <h1 class={cn(h1Class, 'flex items-center gap-3')}>
+        <Icon name={category.icon} class="size-8 text-brand-600 dark:text-brand-300" />
+        {category.name}
+      </h1>
+      <p class={cn(bodyClass, 'mt-3 text-lg')}>{category.intro}</p>
+    </header>
+
+    <section aria-label={`${category.name} list`} class="mt-10">
+      {tools.length > 0 ? (
+        <ToolGrid tools={tools} headingLevel="h2" />
+      ) : (
+        <p class={cn(cardClass, bodyClass)}>
+          We are building the first tools in this category. In the meantime, browse the{' '}
+          <a href="/tools/" class="font-medium text-brand-700 underline dark:text-brand-300">
+            full list of tools
+          </a>
+          .
+        </p>
+      )}
+    </section>
+
+    <section aria-labelledby="other-categories" class="mt-16">
+      <h2 id="other-categories" class={h2Class}>
+        More categories
+      </h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {otherCategories.map((other) => (
+          <li>
+            <a href={categoryUrl(other.id)} class={cn(cardClass, cardLinkClass, 'flex items-center gap-3')}>
+              <Icon name={other.icon} class="size-6 text-brand-600 dark:text-brand-300" />
+              <span class="font-medium text-slate-900 dark:text-white">{other.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

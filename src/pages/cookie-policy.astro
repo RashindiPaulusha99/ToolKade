@@ -1,0 +1,57 @@
+---
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  heading="Cookie Policy"
+  updated={site.legalUpdated}
+  title="Cookie Policy"
+  description="Which cookies and browser storage ToolKade uses for site settings, analytics and advertising, and how you can control or remove them in your browser."
+>
+  <p>
+    This page explains how {site.name} uses cookies and similar technologies such as your browser's local
+    storage.
+  </p>
+
+  <h2>What are cookies?</h2>
+  <p>
+    Cookies are small text files a website stores in your browser. Local storage is a similar feature that
+    lets a site save small amounts of data on your device.
+  </p>
+
+  <h2>What we use</h2>
+  <h3>Settings stored on your device</h3>
+  <p>
+    We use local storage to remember your preferences, such as dark mode and the last values you entered in a
+    tool. This data never leaves your device and is not used for tracking.
+  </p>
+
+  <h3>Analytics cookies</h3>
+  <p>
+    We may use analytics cookies to count visits and see which pages are popular, so we can improve the site.
+    These are set only where you have agreed to them if the law requires consent.
+  </p>
+
+  <h3>Advertising cookies</h3>
+  <p>
+    We may show ads served by Google AdSense. Google and its partners may use cookies to show ads based on
+    your previous visits to this and other websites. You can manage personalised ads at
+    <a href="https://adssettings.google.com/" rel="noopener noreferrer">
+      Google Ads Settings
+    </a>
+    . Learn more in our
+    <a href="/privacy-policy/">privacy policy</a>.
+  </p>
+
+  <h2>Managing cookies</h2>
+  <p>
+    You can block or delete cookies and clear local storage in your browser settings. If you block them, the
+    tools will still work, but your preferences will not be remembered between visits.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions? Email <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</PageLayout>

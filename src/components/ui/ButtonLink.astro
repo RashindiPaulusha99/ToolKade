@@ -1,0 +1,15 @@
+---
+import { buttonVariants, cn, type ButtonVariant } from './styles';
+
+interface Props {
+  href: string;
+  variant?: ButtonVariant;
+  class?: string;
+}
+
+const { href, variant = 'primary', class: className } = Astro.props;
+---
+
+<a href={href} class={cn(buttonVariants[variant], className)}>
+  <slot />
+</a>

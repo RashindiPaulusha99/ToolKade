@@ -1,0 +1,21 @@
+---
+import { h2Class } from '@/components/ui/styles';
+import type { ToolMeta } from '@/data/tools';
+import { getRelatedTools } from '@/lib/tools';
+import ToolGrid from './ToolGrid.astro';
+
+interface Props {
+  tool: ToolMeta;
+}
+
+const related = getRelatedTools(Astro.props.tool);
+---
+
+{related.length > 0 && (
+  <section aria-labelledby="related-tools">
+    <h2 id="related-tools" class={h2Class}>
+      Related tools
+    </h2>
+    <ToolGrid tools={related} class="mt-4 lg:grid-cols-3 xl:grid-cols-4" />
+  </section>
+)}

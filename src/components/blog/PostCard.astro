@@ -1,0 +1,30 @@
+---
+import Badge from '@/components/ui/Badge.astro';
+import { cardClass, cardLinkClass, cn } from '@/components/ui/styles';
+import { getCategory, type CategoryId } from '@/data/categories';
+import type { BlogPost } from '@/lib/blog';
+import { postUrl } from '@/lib/blog';
+import { formatDate, toIsoDate } from '@/lib/format';
+
+interface Props {
+  post: BlogPost;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { post, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+const category = getCategory(post.data.category as CategoryId);
+---
+
+<a href={postUrl(post.id)} class={cn(cardClass, cardLinkClass, 'flex h-full flex-col gap-3')}>
+  <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+    <span class="font-medium tracking-wide uppercase">{category.shortName}</span>
+    <span aria-hidden="true">·</span>
+    <time datetime={toIsoDate(post.data.publishDate)}>{formatDate(post.data.publishDate)}</time>
+    {post.data.draft && <Badge>Draft</Badge>}
+  </div>
+  <Heading class="text-lg leading-snug font-semibold text-slate-900 dark:text-white">
+    {post.data.title}
+  </Heading>
+  <p class="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-400">{post.data.description}</p>
+</a>

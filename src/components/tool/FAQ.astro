@@ -1,0 +1,35 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { bodyClass, h2Class } from '@/components/ui/styles';
+import type { Faq } from '@/tools/types';
+
+interface Props {
+  faqs: Faq[];
+  heading?: string;
+}
+
+// The FAQPage JSON-LD is built by the layout from this same `faqs` array, so the two always match.
+const { faqs, heading = 'Frequently asked questions' } = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section aria-labelledby="faq">
+    <h2 id="faq" class={h2Class}>
+      {heading}
+    </h2>
+    <div class="mt-4 divide-y divide-slate-200 rounded-card border border-slate-200 dark:divide-slate-800 dark:border-slate-800">
+      {faqs.map((faq) => (
+        <details class="group px-5">
+          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium text-slate-900 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-white">
+            <h3 class="text-base font-medium">{faq.q}</h3>
+            <Icon
+              name="ChevronDown"
+              class="size-5 shrink-0 text-slate-500 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+            />
+          </summary>
+          <p class:list={[bodyClass, 'pb-4']}>{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}

@@ -1,0 +1,65 @@
+---
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import ToolSearch from '@/components/layout/ToolSearch.astro';
+import { collectionPageSchema } from '@/components/seo/schema';
+import ToolGrid from '@/components/tool/ToolGrid.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { bodyClass, cn, containerClass, h1Class, h2Class } from '@/components/ui/styles';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { categoryUrl, getCategoriesWithTools, getPublishedTools, toolUrl } from '@/lib/tools';
+
+const title = 'All Free Online Tools';
+const description =
+  'Browse every free ToolKade tool: Sri Lanka tax, duty and bill calculators, plus image, PDF, developer, text and business tools that run in your browser.';
+const groups = getCategoriesWithTools().filter(({ tools }) => tools.length > 0);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  jsonLd={[
+    collectionPageSchema({
+      name: title,
+      description,
+      path: '/tools/',
+      items: getPublishedTools().map((tool) => ({ name: tool.name, path: toolUrl(tool.slug) })),
+    }),
+  ]}
+>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs items={[{ name: 'Tools', href: '/tools/' }]} />
+    <header class="mt-6 max-w-3xl">
+      <h1 class={h1Class}>{title}</h1>
+      <p class={cn(bodyClass, 'mt-3 text-lg')}>
+        Every tool on ToolKade in one place. They are free, need no sign-up and run in your browser.
+      </p>
+      <ToolSearch
+        id="tools-page-search"
+        label="Search tools"
+        hideLabel={false}
+        syncQuery
+        class="mt-6 max-w-xl"
+      />
+    </header>
+
+    <div class="mt-12 space-y-14">
+      {groups.map(({ category, tools }) => (
+        <section aria-labelledby={`cat-${category.id}`}>
+          <div class="flex items-end justify-between gap-4">
+            <h2 id={`cat-${category.id}`} class={cn(h2Class, 'flex items-center gap-2')}>
+              <Icon name={category.icon} class="size-6 text-brand-600 dark:text-brand-300" />
+              {category.name}
+            </h2>
+            <a
+              href={categoryUrl(category.id)}
+              class="text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"
+            >
+              View category
+            </a>
+          </div>
+          <ToolGrid tools={tools} class="mt-6" />
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

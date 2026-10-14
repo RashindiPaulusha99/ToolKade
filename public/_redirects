@@ -1,0 +1,2 @@
+# Cloudflare Pages redirects. Slugs are permanent; when one must change, add a line here:
+# /tools/old-slug/ /tools/new-slug/ 301

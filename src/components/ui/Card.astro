@@ -1,0 +1,17 @@
+---
+import type { HTMLTag } from 'astro/types';
+import { cardClass, cardLinkClass, cn } from './styles';
+
+interface Props {
+  as?: HTMLTag;
+  href?: string;
+  class?: string;
+}
+
+const { as = 'div', href, class: className } = Astro.props;
+const Tag = href ? 'a' : as;
+---
+
+<Tag href={href} class={cn(cardClass, href && cardLinkClass, className)}>
+  <slot />
+</Tag>

@@ -1,0 +1,44 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { formatDate } from '@/lib/format';
+import { isRatesPending, type RatesFile } from '@/lib/rates';
+
+interface Props {
+  rates: RatesFile;
+}
+
+const { rates } = Astro.props;
+const pending = isRatesPending(rates);
+---
+
+<aside
+  aria-label="About the rates used"
+  class:list={[
+    'flex gap-3 rounded-card border p-4 text-sm leading-6',
+    pending
+      ? 'border-warning/40 bg-warning/10 text-slate-800 dark:text-slate-200'
+      : 'border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300',
+  ]}
+>
+  <Icon name={pending ? 'TriangleAlert' : 'Info'} class="mt-0.5 size-5 shrink-0" />
+  <div>
+    {pending ? (
+      <p>
+        <strong>Rates are being updated.</strong>{' '}
+        {`We are verifying the latest official figures (${rates.name}), so this calculator is not giving results yet.`}
+      </p>
+    ) : (
+      <p>
+        <strong>Rates last verified: {formatDate(rates.lastVerified)}</strong> · Effective from{' '}
+        {formatDate(rates.effectiveFrom)} ·{' '}
+        <a href={rates.source} target="_blank" rel="noopener noreferrer" class="font-medium underline">
+          Official source
+        </a>
+      </p>
+    )}
+    <p class="mt-1">
+      Results are estimates for guidance only. Confirm the final figures with the relevant authority before
+      you make a decision.
+    </p>
+  </div>
+</aside>

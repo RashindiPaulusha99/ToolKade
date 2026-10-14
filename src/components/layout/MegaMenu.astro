@@ -1,0 +1,98 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { categoryUrl, getCategoriesWithTools, isPublished, toolUrl } from '@/lib/tools';
+
+const groups = getCategoriesWithTools();
+---
+
+<!-- Not `relative`: the panel is positioned against the header container so it spans the page width. -->
+<div data-mega-menu>
+  <button
+    type="button"
+    class="inline-flex min-h-11 items-center gap-1 rounded-control px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 aria-expanded:bg-slate-100 motion-reduce:transition-none dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:aria-expanded:bg-slate-800"
+    aria-expanded="false"
+    aria-controls="mega-menu-panel"
+    data-mega-trigger
+  >
+    Tools
+    <Icon name="ChevronDown" class="size-4" />
+  </button>
+
+  <div
+    id="mega-menu-panel"
+    class="absolute inset-x-4 top-full z-40 mt-2 hidden rounded-card sm:inset-x-6 border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900"
+    data-mega-panel
+  >
+    <div class="grid grid-cols-3 gap-x-8 gap-y-6">
+      {groups.map(({ category, tools }) => (
+        <section aria-labelledby={`mega-${category.id}`}>
+          <a
+            id={`mega-${category.id}`}
+            href={categoryUrl(category.id)}
+            class="flex items-center gap-2 rounded-control font-semibold text-slate-900 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-white dark:hover:text-brand-300"
+          >
+            <Icon name={category.icon} class="size-5 text-brand-600 dark:text-brand-300" />
+            {category.name}
+          </a>
+          <ul class="mt-2 space-y-0.5">
+            {tools.map((tool) => (
+              <li>
+                {isPublished(tool) ? (
+                  <a
+                    href={toolUrl(tool.slug)}
+                    class="block rounded-control px-2 py-1.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                  >
+                    {tool.shortName ?? tool.name}
+                  </a>
+                ) : (
+                  <span class="flex items-center justify-between gap-2 px-2 py-1.5 text-sm text-slate-500 dark:text-slate-400">
+                    {tool.shortName ?? tool.name}
+                    <span class="text-xs text-accent-700 dark:text-accent-300">Soon</span>
+                  </span>
+                )}
+              </li>
+            ))}
+            {tools.length === 0 && (
+              <li class="px-2 py-1.5 text-sm text-slate-500 dark:text-slate-400">Tools coming soon</li>
+            )}
+          </ul>
+        </section>
+      ))}
+    </div>
+    <div class="mt-6 border-t border-slate-200 pt-4 dark:border-slate-800">
+      <a
+        href="/tools/"
+        class="inline-flex items-center gap-1 text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"
+      >
+        Browse all tools <Icon name="ArrowRight" class="size-4" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-mega-menu]').forEach((root) => {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-mega-trigger]');
+    const panel = root.querySelector<HTMLElement>('[data-mega-panel]');
+    if (!trigger || !panel) return;
+
+    const setOpen = (open: boolean) => {
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('hidden', !open);
+    };
+
+    trigger.addEventListener('click', () => setOpen(trigger.getAttribute('aria-expanded') !== 'true'));
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) setOpen(false);
+    });
+    document.addEventListener('click', (event) => {
+      if (!root.contains(event.target as Node)) setOpen(false);
+    });
+  });
+</script>

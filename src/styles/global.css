@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand: deep teal (primary) */
+  --color-brand-50: #effaf8;
+  --color-brand-100: #d7f2ed;
+  --color-brand-200: #a9e2d9;
+  --color-brand-300: #6fcabd;
+  --color-brand-400: #34a99b;
+  --color-brand-500: #14857a;
+  --color-brand-600: #0f6b62;
+  --color-brand-700: #0d564f;
+  --color-brand-800: #0b4440;
+  --color-brand-900: #082f2c;
+
+  /* Accent: warm amber (highlights, badges) */
+  --color-accent-300: #f8c56a;
+  --color-accent-400: #f5a524;
+  --color-accent-500: #e08e0b;
+  --color-accent-700: #8a5306; /* text on light amber backgrounds (AA contrast) */
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+
+  /* Typography */
+  --font-sans: 'Inter Variable', 'Inter', 'Noto Sans Sinhala', 'Noto Sans Tamil', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Shape: generates rounded-card and rounded-control utilities */
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  }
+
+  :where([lang='si'], [lang='ta']) {
+    @apply leading-8;
+  }
+
+  /* Inputs at 16px so iOS Safari does not zoom on focus. */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1rem);
+  }
+}

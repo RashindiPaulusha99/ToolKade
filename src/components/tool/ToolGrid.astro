@@ -1,0 +1,21 @@
+---
+import type { ToolMeta } from '@/data/tools';
+import ToolCard from './ToolCard.astro';
+
+interface Props {
+  tools: ToolMeta[];
+  headingLevel?: 'h2' | 'h3';
+  showCategory?: boolean;
+  class?: string;
+}
+
+const { tools, headingLevel, showCategory, class: className } = Astro.props;
+---
+
+<ul class:list={['grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4', className]}>
+  {tools.map((tool) => (
+    <li>
+      <ToolCard tool={tool} headingLevel={headingLevel} showCategory={showCategory} />
+    </li>
+  ))}
+</ul>

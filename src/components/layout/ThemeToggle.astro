@@ -1,0 +1,38 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { buttonVariants, cn } from '@/components/ui/styles';
+
+interface Props {
+  class?: string;
+}
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-label="Switch to dark mode"
+  class={cn(buttonVariants.ghost, 'size-11 px-0', Astro.props.class)}
+>
+  <Icon name="Moon" class="size-5 dark:hidden" />
+  <Icon name="Sun" class="hidden size-5 dark:block" />
+</button>
+
+<script>
+  function label(button: Element) {
+    const dark = document.documentElement.classList.contains('dark');
+    button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+
+  document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+    label(button);
+    button.addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('dark');
+      try {
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      } catch {
+        // Storage can be unavailable (private mode); the toggle still works for this page view.
+      }
+      document.querySelectorAll('[data-theme-toggle]').forEach(label);
+    });
+  });
+</script>

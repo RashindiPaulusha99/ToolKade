@@ -1,0 +1,38 @@
+---
+import { adsEnabled, adsenseClient } from '@/lib/ads';
+import { cn } from '@/components/ui/styles';
+
+interface Props {
+  /** AdSense ad unit ID (data-ad-slot). */
+  slot?: string;
+  /**
+   * Reserved height so the ad never shifts the layout (CLS).
+   * Rules: never place between a tool's inputs and its result, or next to download buttons.
+   */
+  size?: 'banner' | 'rectangle' | 'sidebar';
+  class?: string;
+}
+
+const { slot = '', size = 'banner', class: className } = Astro.props;
+const reserved = {
+  banner: 'min-h-[100px] md:min-h-[90px]', // responsive leaderboard
+  rectangle: 'min-h-[250px]', // 300×250 / in-article
+  sidebar: 'min-h-[600px]', // 300×600 skyscraper (xl only)
+}[size];
+---
+
+{adsEnabled() && (
+  <aside aria-label="Advertisement" class={cn('my-8 flex flex-col items-center', reserved, className)}>
+    <span class="mb-1 text-xs tracking-wide text-slate-400 uppercase">Advertisement</span>
+    <ins
+      class="adsbygoogle block w-full"
+      data-ad-client={adsenseClient()}
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+    <script is:inline>
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </aside>
+)}

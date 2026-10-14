@@ -1,0 +1,102 @@
+---
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  heading="Privacy Policy"
+  updated={site.legalUpdated}
+  title="Privacy Policy"
+  description="How ToolKade handles your data: our tools run in your browser and never upload your files, plus what we collect for analytics, ads and the contact form."
+>
+  <p>
+    This policy explains what information {site.name} ({site.url}) collects, how it is used and the choices
+    you have.
+  </p>
+
+  <h2>Our tools run in your browser</h2>
+  <p>
+    <strong>
+      Files and data you use with our tools are processed in your browser and are never uploaded to our
+      servers.
+    </strong>
+    When you compress an image, format JSON or calculate your salary, the work happens on your own device. We
+    do not receive, store or see the files, text or numbers you enter.
+  </p>
+  <p>
+    Some tools remember your last inputs or settings (such as dark mode) using your browser's local storage,
+    so they are still there when you come back. This information stays on your device. You can clear it at any
+    time in your browser settings.
+  </p>
+
+  <h2>Information we collect</h2>
+  <ul>
+    <li>
+      <strong>Contact form.</strong> If you send us a message, the details you type (name, email address and
+      message) are delivered to us through a third-party form provider. We use them only to reply to you.
+    </li>
+    <li>
+      <strong>Analytics.</strong> We may use privacy-respecting analytics (such as Google Analytics) to
+      understand which pages are visited and how the site performs. This data is aggregated and does not
+      include anything you type into our tools.
+    </li>
+    <li>
+      <strong>Server logs.</strong> Our hosting provider may keep standard logs (such as IP address, browser
+      type and the pages requested) for security and to keep the site running.
+    </li>
+  </ul>
+
+  <h2>Advertising</h2>
+  <p>
+    We may show ads served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads
+    based on your previous visits to this website or other websites. Google's use of advertising cookies
+    enables it and its partners to serve ads based on your visits to this site and other sites on the
+    internet.
+  </p>
+  <p>
+    You can opt out of personalised advertising by visiting
+    <a href="https://adssettings.google.com/" rel="noopener noreferrer">
+      Google Ads Settings
+    </a>
+    , or opt out of some third-party vendors' use of cookies at
+    <a href="https://www.aboutads.info/choices/" rel="noopener noreferrer">
+      aboutads.info
+    </a>
+    . Learn more about
+    <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">
+      how Google uses data from sites that use its services
+    </a>
+    . Where the law requires it, we will ask for your consent before setting non-essential cookies. See our
+    <a href="/cookie-policy/">cookie policy</a>.
+  </p>
+
+  <h2>How we share information</h2>
+  <p>
+    We do not sell your personal information. We share it only with the service providers described above
+    (hosting, analytics, advertising and the contact form provider), or when the law requires it.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    ToolKade is a general audience website. We do not knowingly collect personal information from children
+    under 13.
+  </p>
+
+  <h2>Your choices and rights</h2>
+  <p>
+    You can block or delete cookies in your browser, clear local storage, and opt out of personalised ads
+    using the links above. To ask about or delete information you have sent us through the contact form, email
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    We may update this policy as the site grows, for example when we add new tools or services. The date at
+    the top shows when it last changed.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about privacy? Email <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</PageLayout>

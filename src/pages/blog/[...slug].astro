@@ -1,0 +1,23 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import ToolCTA from '@/components/blog/ToolCTA.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { getPublishedPosts, type BlogPost } from '@/lib/blog';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<BlogLayout post={post} headings={headings}>
+  <Content components={{ ToolCTA }} />
+</BlogLayout>

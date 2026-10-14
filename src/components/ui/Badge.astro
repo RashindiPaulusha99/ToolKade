@@ -1,0 +1,11 @@
+---
+import { badgeClass, cn } from './styles';
+
+interface Props {
+  class?: string;
+}
+---
+
+<span class={cn(badgeClass, Astro.props.class)}>
+  <slot />
+</span>

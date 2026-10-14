@@ -1,0 +1,75 @@
+---
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  heading="Terms of Use"
+  updated={site.legalUpdated}
+  title="Terms of Use"
+  description="The terms for using ToolKade's free online tools and calculators, including acceptable use, accuracy of results, intellectual property and liability limits."
+>
+  <p>
+    By using {site.name} ({site.url}) you agree to these terms. If you do not agree, please do not use the
+    site.
+  </p>
+
+  <h2>Using our tools</h2>
+  <p>
+    Our tools are free for personal and commercial use. You may not use the site in a way that harms it or
+    other users, for example by trying to break its security, overloading it with automated requests, or
+    copying the site in bulk.
+  </p>
+
+  <h2>Results are estimates</h2>
+  <p>
+    Calculators and converters give estimates based on the information you enter and the rates available to us
+    when they were last updated. Laws, tax brackets, duty rates and tariffs change. Results are not
+    professional, financial, tax or legal advice. Always confirm important figures with the relevant authority
+    or a qualified professional. See our <a href="/disclaimer/">disclaimer</a>.
+  </p>
+
+  <h2>Your content</h2>
+  <p>
+    Files and text you use with our tools are processed in your browser and are not uploaded to us. You are
+    responsible for having the right to use any content you process.
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    The site's design, code, text and logos belong to {site.name}. You may link to any page. Please do not
+    copy our articles or tools without permission.
+  </p>
+
+  <h2>No warranty</h2>
+  <p>
+    The site is provided "as is", without warranties of any kind. We work to keep it accurate and available,
+    but we do not guarantee that it will be error-free or always online.
+  </p>
+
+  <h2>Limitation of liability</h2>
+  <p>
+    To the extent the law allows, {site.name} is not liable for any loss or damage arising from your use of
+    the site or reliance on its results.
+  </p>
+
+  <h2>Third-party links and ads</h2>
+  <p>
+    The site may link to other websites and show ads from third parties. We are not responsible for their
+    content or practices.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    We may update these terms from time to time. The date at the top shows when they last changed. Continued
+    use of the site means you accept the updated terms.
+  </p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of the Democratic Socialist Republic of Sri Lanka.</p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about these terms? Email <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</PageLayout>

@@ -1,0 +1,189 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { cn, inputClass } from '@/components/ui/styles';
+
+interface Props {
+  /** Unique per page; used for the input id and ARIA wiring. */
+  id: string;
+  label?: string;
+  /** Visually hide the label (it stays available to screen readers). */
+  hideLabel?: boolean;
+  placeholder?: string;
+  /** Read the initial query from ?q= and keep it in the URL (used on /tools/). */
+  syncQuery?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label = 'Search tools',
+  hideLabel = true,
+  placeholder = 'Search tools, e.g. "APIT"',
+  syncQuery = false,
+  class: className,
+} = Astro.props;
+---
+
+<div class={cn('relative', className)} data-tool-search data-sync-query={syncQuery ? 'true' : undefined}>
+  <form action="/tools/" method="get" role="search">
+    <label for={id} class={hideLabel ? 'sr-only' : 'mb-1.5 block text-sm font-medium'}>
+      {label}
+    </label>
+    <div class="relative">
+      <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+        <Icon name="Search" class="size-5" />
+      </span>
+      <input
+        id={id}
+        name="q"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder={placeholder}
+        aria-controls={`${id}-results`}
+        aria-describedby={`${id}-status`}
+        class={cn(inputClass, 'pl-10')}
+        data-search-input
+      />
+    </div>
+  </form>
+  <p id={`${id}-status`} class="sr-only" aria-live="polite" data-search-status></p>
+  <ul
+    id={`${id}-results`}
+    class="absolute inset-x-0 top-full z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-card border border-slate-200 bg-white p-2 shadow-lg dark:border-slate-700 dark:bg-slate-900"
+    data-search-results
+  ></ul>
+</div>
+
+<script>
+  import { searchTools, type SearchItem } from '@/lib/search';
+
+  const dataEl = document.getElementById('tool-search-data');
+  const items: SearchItem[] = dataEl?.textContent ? JSON.parse(dataEl.textContent) : [];
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string) {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  function init(root: HTMLElement) {
+    const input = root.querySelector<HTMLInputElement>('[data-search-input]');
+    const list = root.querySelector<HTMLUListElement>('[data-search-results]');
+    const status = root.querySelector<HTMLElement>('[data-search-status]');
+    if (!input || !list || !status) return;
+    const syncQuery = root.dataset.syncQuery === 'true';
+
+    function close() {
+      list!.classList.add('hidden');
+    }
+
+    function render() {
+      const query = input!.value.trim();
+      list!.replaceChildren();
+      if (!query) {
+        status!.textContent = '';
+        close();
+        return;
+      }
+      const results = searchTools(query, items);
+      status!.textContent = results.length
+        ? `${results.length} tool${results.length === 1 ? '' : 's'} found`
+        : 'No tools found';
+
+      if (results.length === 0) {
+        list!.append(
+          el('li', 'px-3 py-2 text-sm text-slate-500 dark:text-slate-400', `No tools match "${query}".`),
+        );
+      }
+      for (const result of results) {
+        const li = el('li', '');
+        const row = el(
+          result.published ? 'a' : 'div',
+          'flex min-h-11 items-center justify-between gap-3 rounded-control px-3 py-2 text-sm',
+        );
+        if (result.published) {
+          (row as HTMLAnchorElement).href = result.url;
+          row.classList.add(
+            'hover:bg-brand-50',
+            'focus-visible:bg-brand-50',
+            'focus-visible:outline-2',
+            'focus-visible:outline-brand-500',
+            'dark:hover:bg-slate-800',
+            'dark:focus-visible:bg-slate-800',
+          );
+        } else {
+          row.classList.add('text-slate-500', 'dark:text-slate-400');
+        }
+        const text = el('span', 'flex flex-col');
+        text.append(el('span', 'font-medium text-slate-900 dark:text-slate-100', result.name));
+        text.append(el('span', 'text-xs text-slate-500 dark:text-slate-400', result.category));
+        row.append(text);
+        if (!result.published) {
+          row.append(
+            el(
+              'span',
+              'shrink-0 rounded-full bg-accent-400/15 px-2.5 py-0.5 text-xs font-medium text-accent-700 dark:text-accent-300',
+              'Coming soon',
+            ),
+          );
+        }
+        li.append(row);
+        list!.append(li);
+      }
+      list!.classList.remove('hidden');
+
+      if (syncQuery) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', query);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    input.addEventListener('input', render);
+    input.addEventListener('focus', () => {
+      if (input.value.trim()) render();
+    });
+
+    // Enter goes to the first published result instead of submitting to /tools/.
+    root.querySelector('form')?.addEventListener('submit', (event) => {
+      const first = list.querySelector<HTMLAnchorElement>('a[href]');
+      if (first) {
+        event.preventDefault();
+        window.location.href = first.href;
+      }
+    });
+
+    // Arrow keys move between result links; Escape closes.
+    root.addEventListener('keydown', (event) => {
+      const links = Array.from(list.querySelectorAll<HTMLAnchorElement>('a[href]'));
+      const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+      if (event.key === 'ArrowDown' && links.length) {
+        event.preventDefault();
+        links[Math.min(index + 1, links.length - 1)].focus();
+      } else if (event.key === 'ArrowUp' && index >= 0) {
+        event.preventDefault();
+        if (index === 0) input.focus();
+        else links[index - 1].focus();
+      } else if (event.key === 'Escape') {
+        close();
+        input.focus();
+      }
+    });
+
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) close();
+    });
+
+    if (syncQuery) {
+      const initial = new URLSearchParams(window.location.search).get('q');
+      if (initial) {
+        input.value = initial;
+        render();
+      }
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-tool-search]').forEach(init);
+</script>

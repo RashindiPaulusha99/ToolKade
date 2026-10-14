@@ -1,0 +1,154 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { buttonVariants, cn } from '@/components/ui/styles';
+import { categoryUrl, getCategoriesWithTools, isPublished, toolUrl } from '@/lib/tools';
+import ToolSearch from './ToolSearch.astro';
+import { primaryNav } from './nav';
+
+const groups = getCategoriesWithTools();
+const linkClass =
+  'flex min-h-11 items-center rounded-control px-3 py-2 font-medium text-slate-800 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-slate-100 dark:hover:bg-slate-800';
+---
+
+<div data-mobile-nav class="lg:hidden">
+  <button
+    type="button"
+    class={cn(buttonVariants.ghost, 'size-11 px-0')}
+    aria-expanded="false"
+    aria-controls="mobile-drawer"
+    aria-label="Open menu"
+    data-drawer-open
+  >
+    <Icon name="Menu" class="size-6" />
+  </button>
+
+  <div
+    id="mobile-drawer"
+    class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-white dark:bg-slate-950"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site menu"
+    data-drawer
+  >
+    <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-800">
+      <span class="text-lg font-bold text-brand-700 dark:text-brand-300">Menu</span>
+      <button
+        type="button"
+        class={cn(buttonVariants.ghost, 'size-11 px-0')}
+        aria-label="Close menu"
+        data-drawer-close
+      >
+        <Icon name="X" class="size-6" />
+      </button>
+    </div>
+
+    <div class="space-y-6 px-4 py-4">
+      <ToolSearch id="mobile-tool-search" />
+
+      <nav aria-label="Mobile">
+        <ul class="space-y-1">
+          {primaryNav.map((item) => (
+            <li>
+              <a href={item.href} class={linkClass}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div>
+        <p class="px-3 text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+          Tools
+        </p>
+        <div class="mt-2 divide-y divide-slate-200 dark:divide-slate-800">
+          {groups.map(({ category, tools }) => (
+            <details class="group">
+              <summary class={cn(linkClass, 'cursor-pointer list-none justify-between')}>
+                <span class="flex items-center gap-2">
+                  <Icon name={category.icon} class="size-5 text-brand-600 dark:text-brand-300" />
+                  {category.name}
+                </span>
+                <Icon
+                  name="ChevronDown"
+                  class="size-5 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                />
+              </summary>
+              <ul class="mb-2 ml-9 space-y-0.5">
+                <li>
+                  <a
+                    href={categoryUrl(category.id)}
+                    class={cn(linkClass, 'text-sm text-brand-700 dark:text-brand-300')}
+                  >
+                    All {category.name}
+                  </a>
+                </li>
+                {tools.map((tool) => (
+                  <li>
+                    {isPublished(tool) ? (
+                      <a href={toolUrl(tool.slug)} class={cn(linkClass, 'text-sm font-normal')}>
+                        {tool.shortName ?? tool.name}
+                      </a>
+                    ) : (
+                      <span class="flex min-h-11 items-center justify-between px-3 text-sm text-slate-500 dark:text-slate-400">
+                        {tool.shortName ?? tool.name}
+                        <span class="text-xs text-accent-700 dark:text-accent-300">Soon</span>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-mobile-nav]').forEach((root) => {
+    const openBtn = root.querySelector<HTMLButtonElement>('[data-drawer-open]');
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-drawer-close]');
+    const drawer = root.querySelector<HTMLElement>('[data-drawer]');
+    if (!openBtn || !closeBtn || !drawer) return;
+
+    const setOpen = (open: boolean) => {
+      drawer.classList.toggle('hidden', !open);
+      drawer.classList.toggle('flex', open);
+      openBtn.setAttribute('aria-expanded', String(open));
+      document.body.classList.toggle('overflow-hidden', open);
+      if (open) closeBtn.focus();
+      else openBtn.focus();
+    };
+
+    openBtn.addEventListener('click', () => setOpen(true));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    drawer.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      // Keep keyboard focus inside the open drawer.
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(
+        drawer.querySelectorAll<HTMLElement>(
+          'a[href], button, input, summary, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((node) => node.offsetParent !== null);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    });
+    // Close if the viewport grows past the mobile breakpoint while open.
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+      if (event.matches && !drawer.classList.contains('hidden')) setOpen(false);
+    });
+  });
+</script>

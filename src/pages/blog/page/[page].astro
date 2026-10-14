@@ -1,0 +1,27 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogIndex from '@/components/blog/BlogIndex.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedPosts, POSTS_PER_PAGE, type BlogPost } from '@/lib/blog';
+
+// Page 1 lives at /blog/, so only pages 2+ are generated here.
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPublishedPosts();
+  return paginate(posts, { pageSize: POSTS_PER_PAGE }).filter(
+    (path) => path.params.page !== undefined && path.params.page !== '1',
+  );
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: { data: BlogPost[]; currentPage: number; lastPage: number };
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout
+  title={`Blog: Page ${page.currentPage}`}
+  description={`Page ${page.currentPage} of the ToolKade blog: guides to Sri Lankan tax, duty and bills, and how-tos for image, PDF, developer and text tools.`}
+>
+  <BlogIndex posts={page.data} currentPage={page.currentPage} lastPage={page.lastPage} />
+</BaseLayout>

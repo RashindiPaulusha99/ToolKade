@@ -1,0 +1,15 @@
+---
+import { serializeJsonLd, type JsonLdObject } from './schema';
+
+interface Props {
+  data: JsonLdObject | Array<JsonLdObject | null | undefined>;
+}
+
+const items = (Array.isArray(Astro.props.data) ? Astro.props.data : [Astro.props.data]).filter(
+  (item): item is JsonLdObject => Boolean(item),
+);
+---
+
+{items.map((item) => (
+  <script is:inline type="application/ld+json" set:html={serializeJsonLd(item)} />
+))}

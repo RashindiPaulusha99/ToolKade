@@ -1,0 +1,32 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { cardClass, cardLinkClass, cn, h2Class } from '@/components/ui/styles';
+import type { ToolMeta } from '@/data/tools';
+import { getPost, postUrl } from '@/lib/blog';
+
+interface Props {
+  tool: ToolMeta;
+}
+
+const { tool } = Astro.props;
+const post = tool.blogSlug ? await getPost(tool.blogSlug) : undefined;
+---
+
+{post && (
+  <section aria-labelledby="related-guide">
+    <h2 id="related-guide" class={h2Class}>
+      Read the full guide
+    </h2>
+    <a href={postUrl(post.id)} class={cn(cardClass, cardLinkClass, 'mt-4 flex items-start gap-4')}>
+      <span class="flex size-11 shrink-0 items-center justify-center rounded-control bg-accent-400/15 text-accent-700 dark:text-accent-300">
+        <Icon name="BookOpen" class="size-6" />
+      </span>
+      <span>
+        <span class="block font-semibold text-slate-900 dark:text-white">{post.data.title}</span>
+        <span class="mt-1 block text-sm leading-6 text-slate-600 dark:text-slate-400">
+          {post.data.description}
+        </span>
+      </span>
+    </a>
+  </section>
+)}

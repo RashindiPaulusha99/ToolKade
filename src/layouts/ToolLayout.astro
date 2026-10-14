@@ -1,0 +1,98 @@
+---
+import AdSlot from '@/components/ads/AdSlot.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { faqSchema, webApplicationSchema } from '@/components/seo/schema';
+import FAQ from '@/components/tool/FAQ.astro';
+import HowToUse from '@/components/tool/HowToUse.astro';
+import RatesNotice from '@/components/tool/RatesNotice.astro';
+import RelatedPost from '@/components/tool/RelatedPost.astro';
+import RelatedTools from '@/components/tool/RelatedTools.astro';
+import ToolHeader from '@/components/tool/ToolHeader.astro';
+import { bodyClass, cn, containerClass, h2Class } from '@/components/ui/styles';
+import { getCategory } from '@/data/categories';
+import type { ToolMeta } from '@/data/tools';
+import { adsEnabled } from '@/lib/ads';
+import type { RatesFile } from '@/lib/rates';
+import { categoryUrl, toolUrl } from '@/lib/tools';
+import type { ToolContent } from '@/tools/types';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  tool: ToolMeta;
+  content: ToolContent;
+  /** Pass the rates file for rates-based tools; renders the RatesNotice. */
+  rates?: RatesFile;
+}
+
+const { tool, content, rates } = Astro.props;
+const category = getCategory(tool.category);
+const showSidebarAd = adsEnabled();
+---
+
+<BaseLayout
+  title={tool.title}
+  description={tool.description}
+  image={`/og/tools/${tool.slug}.png`}
+  imageAlt={tool.name}
+  jsonLd={[webApplicationSchema(tool), faqSchema(content.faqs)]}
+>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs
+      items={[
+        { name: 'Tools', href: '/tools/' },
+        { name: category.name, href: categoryUrl(category.id) },
+        { name: tool.name, href: toolUrl(tool.slug) },
+      ]}
+    />
+
+    <div class={cn('mt-6', showSidebarAd && 'xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-10')}>
+      <article>
+        <ToolHeader tool={tool} intro={content.intro} />
+
+        <!-- The interactive tool (React island). Inputs and result live inside it, so no ad can sit between them. -->
+        <section aria-label={tool.name} class="mt-8">
+          <slot />
+        </section>
+
+        {rates && <RatesNotice rates={rates} />}
+
+        <AdSlot size="banner" />
+
+        <div class="mt-12 max-w-3xl space-y-12">
+          <HowToUse toolName={tool.name} steps={content.howTo} />
+
+          {content.howItWorks.length > 0 && (
+            <section aria-labelledby="how-it-works">
+              <h2 id="how-it-works" class={h2Class}>
+                How it works
+              </h2>
+              <div class="mt-4 space-y-4">
+                {content.howItWorks.map((paragraph) => (
+                  <p class={bodyClass}>{paragraph}</p>
+                ))}
+              </div>
+              <slot name="how-it-works" />
+            </section>
+          )}
+
+          <FAQ faqs={content.faqs} />
+          <RelatedPost tool={tool} />
+        </div>
+
+        <div class="mt-12">
+          <RelatedTools tool={tool} />
+        </div>
+
+        <AdSlot size="rectangle" />
+      </article>
+
+      {showSidebarAd && (
+        <div class="hidden xl:block">
+          <div class="sticky top-24">
+            <AdSlot size="sidebar" class="my-0" />
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>

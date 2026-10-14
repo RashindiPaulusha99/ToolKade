@@ -1,0 +1,109 @@
+---
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import {
+  bodyClass,
+  buttonVariants,
+  cardClass,
+  cn,
+  containerClass,
+  h1Class,
+  inputClass,
+  labelClass,
+} from '@/components/ui/styles';
+import { site } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+// Third-party form endpoint (e.g. Formspree). Without it, the page shows the email address only.
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT;
+---
+
+<BaseLayout
+  title="Contact ToolKade"
+  description="Contact the ToolKade team to report a mistake, tell us a rate has changed, suggest a new tool or ask about advertising. We reply within a few days."
+>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs items={[{ name: 'Contact', href: '/contact/' }]} />
+    <div class="mx-auto mt-6 max-w-2xl">
+      <h1 class={h1Class}>Contact us</h1>
+      <p class={cn(bodyClass, 'mt-3 text-lg')}>
+        Spotted a mistake, a rate that has changed or a tool you would like us to build? Send us a message.
+        You can also email{' '}
+        <a href={`mailto:${site.email}`} class="font-medium text-brand-700 underline dark:text-brand-300">
+          {site.email}
+        </a>
+        .
+      </p>
+
+      {endpoint ? (
+        <form action={endpoint} method="POST" class={cn(cardClass, 'mt-8 space-y-5')}>
+          <div>
+            <label for="contact-name" class={labelClass}>
+              Your name
+            </label>
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              class={inputClass}
+            />
+          </div>
+          <div>
+            <label for="contact-email" class={labelClass}>
+              Email address
+            </label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class={inputClass}
+            />
+          </div>
+          <div>
+            <label for="contact-topic" class={labelClass}>
+              Topic
+            </label>
+            <select id="contact-topic" name="topic" class={inputClass}>
+              <option>Report a mistake or outdated rate</option>
+              <option>Suggest a new tool</option>
+              <option>Advertising or partnership</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div>
+            <label for="contact-message" class={labelClass}>
+              Message
+            </label>
+            <textarea id="contact-message" name="message" rows="6" required class={inputClass} />
+          </div>
+          {/* Honeypot field for spam bots; hidden from people and assistive technology. */}
+          <div class="hidden" aria-hidden="true">
+            <label for="contact-gotcha">Leave this empty</label>
+            <input id="contact-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Your message is sent to our form provider so we can reply. See our{' '}
+            <a href="/privacy-policy/" class="underline">
+              privacy policy
+            </a>
+            .
+          </p>
+          <button type="submit" class={buttonVariants.primary}>
+            Send message
+          </button>
+        </form>
+      ) : (
+        <p class={cn(cardClass, bodyClass, 'mt-8')}>
+          Email us at{' '}
+          <a href={`mailto:${site.email}`} class="font-medium text-brand-700 underline dark:text-brand-300">
+            {site.email}
+          </a>{' '}
+          and we will reply within a few days.
+        </p>
+      )}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  heading="About ToolKade"
+  title="About ToolKade: Free Tools That Run in Your Browser"
+  description="ToolKade builds free, fast online tools for Sri Lanka and beyond. Learn how our tools work, how we keep rates accurate and how we protect your privacy."
+>
+  <p>
+    <strong>ToolKade</strong> ("kade" means shop) is a collection of free online tools. We started with the
+    calculators people in Sri Lanka search for every month, such as take-home pay after APIT and EPF, vehicle
+    import duty and CEB electricity bills, and we are adding everyday image, PDF, developer and text tools
+    alongside them.
+  </p>
+
+  <h2>What we believe</h2>
+  <ul>
+    <li>
+      <strong>Tools should be free and fast.</strong> No sign-up, no waiting and pages that load quickly on a
+      phone with a weak signal.
+    </li>
+    <li>
+      <strong>Your data is yours.</strong> Our tools run in your browser. Files you compress and numbers you
+      enter are processed on your own device and are never uploaded to our servers.
+    </li>
+    <li>
+      <strong>Numbers should be traceable.</strong> Tax brackets, duty rates and tariffs change often. Every
+      calculator that depends on official rates shows where those rates come from and the date we last checked
+      them.
+    </li>
+  </ul>
+
+  <h2>How we keep calculators accurate</h2>
+  <p>
+    Official rates are kept in separate data files with a link to the source, such as the Inland Revenue
+    Department, Sri Lanka Customs or the Public Utilities Commission. When we cannot confirm a figure, the
+    calculator says so rather than guessing. Results are still estimates, so please confirm important figures
+    with the relevant authority before you rely on them. See our <a href="/disclaimer/">disclaimer</a> for
+    details.
+  </p>
+
+  <h2>How ToolKade is funded</h2>
+  <p>
+    ToolKade is free to use. We plan to cover our costs with advertising and, later, optional premium features
+    such as ad-free use and batch processing. The core tools will stay free.
+  </p>
+
+  <h2>Get in touch</h2>
+  <p>
+    Found a mistake, a rate that has changed or a tool you would like us to build? We would like to hear from
+    you. Use the <a href="/contact/">contact page</a> or email{' '}
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</PageLayout>

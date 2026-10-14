@@ -1,0 +1,35 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { buttonVariants, cn, resultPanelClass } from '@/components/ui/styles';
+import { getTool, isPublished, toolUrl } from '@/lib/tools';
+
+interface Props {
+  /** Registry slug of the tool to promote. */
+  slug: string;
+  /** Optional custom call to action, e.g. "Calculate your APIT". */
+  label?: string;
+}
+
+const { slug, label } = Astro.props;
+const tool = getTool(slug);
+if (!tool) throw new Error(`ToolCTA: unknown tool slug "${slug}"`);
+const published = isPublished(tool);
+---
+
+<aside class={cn(resultPanelClass, 'not-prose my-8 flex flex-col gap-4 sm:flex-row sm:items-center')}>
+  <span class="flex size-12 shrink-0 items-center justify-center rounded-control bg-white text-brand-700 dark:bg-slate-900 dark:text-brand-200">
+    <Icon name={tool.icon} class="size-6" />
+  </span>
+  <div class="flex-1">
+    <p class="font-semibold text-slate-900 dark:text-white">{tool.name}</p>
+    <p class="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-300">{tool.description}</p>
+  </div>
+  {published ? (
+    <a href={toolUrl(tool.slug)} class={cn(buttonVariants.primary, 'shrink-0')}>
+      {label ?? `Open the ${tool.shortName ?? tool.name}`}
+      <Icon name="ArrowRight" class="size-5" />
+    </a>
+  ) : (
+    <span class="shrink-0 text-sm font-medium text-accent-700 dark:text-accent-300">Coming soon</span>
+  )}
+</aside>

@@ -1,0 +1,97 @@
+---
+import { containerClass, cn } from '@/components/ui/styles';
+import { categories } from '@/data/categories';
+import { site } from '@/data/site';
+import { categoryUrl } from '@/lib/tools';
+import { legalNav } from './nav';
+
+const year = new Date().getFullYear();
+const linkClass =
+  'inline-block py-1 text-sm text-slate-600 hover:text-brand-700 hover:underline focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-slate-400 dark:hover:text-brand-300';
+const headingClass = 'text-sm font-semibold text-slate-900 dark:text-white';
+---
+
+<footer class="mt-16 border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50">
+  <div class={cn(containerClass, 'grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4')}>
+    <div class="sm:col-span-2 lg:col-span-1">
+      <a href="/" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        Tool<span class="text-brand-600 dark:text-brand-300">Kade</span>
+      </a>
+      <p class="mt-3 max-w-xs text-sm leading-6 text-slate-600 dark:text-slate-400">{site.tagline}</p>
+      <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+        <a href={`mailto:${site.email}`} class="hover:underline">
+          {site.email}
+        </a>
+      </p>
+    </div>
+
+    <nav aria-labelledby="footer-tools">
+      <h2 id="footer-tools" class={headingClass}>
+        Tools
+      </h2>
+      <ul class="mt-3">
+        {categories.map((category) => (
+          <li>
+            <a href={categoryUrl(category.id)} class={linkClass}>
+              {category.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-company">
+      <h2 id="footer-company" class={headingClass}>
+        ToolKade
+      </h2>
+      <ul class="mt-3">
+        <li>
+          <a href="/tools/" class={linkClass}>
+            All tools
+          </a>
+        </li>
+        <li>
+          <a href="/blog/" class={linkClass}>
+            Blog
+          </a>
+        </li>
+        <li>
+          <a href="/about/" class={linkClass}>
+            About
+          </a>
+        </li>
+        <li>
+          <a href="/contact/" class={linkClass}>
+            Contact
+          </a>
+        </li>
+        <li>
+          <a href="/rss.xml" class={linkClass}>
+            RSS feed
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-legal">
+      <h2 id="footer-legal" class={headingClass}>
+        Legal
+      </h2>
+      <ul class="mt-3">
+        {legalNav.map((item) => (
+          <li>
+            <a href={item.href} class={linkClass}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-slate-200 dark:border-slate-800">
+    <p class={cn(containerClass, 'py-6 text-sm text-slate-500 dark:text-slate-400')}>
+      {`© ${year} ${site.name}.`} Free tools that run in your browser. Results are estimates; check official
+      sources before you rely on them.
+    </p>
+  </div>
+</footer>

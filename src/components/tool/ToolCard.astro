@@ -1,0 +1,42 @@
+---
+import Badge from '@/components/ui/Badge.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { cardClass, cardLinkClass, cn } from '@/components/ui/styles';
+import { getCategory } from '@/data/categories';
+import type { ToolMeta } from '@/data/tools';
+import { isPublished, toolUrl } from '@/lib/tools';
+
+interface Props {
+  tool: ToolMeta;
+  /** Heading level for the tool name, so card grids fit the page outline. */
+  headingLevel?: 'h2' | 'h3';
+  showCategory?: boolean;
+}
+
+const { tool, headingLevel = 'h3', showCategory = false } = Astro.props;
+const published = isPublished(tool);
+const Heading = headingLevel;
+const Tag = published ? 'a' : 'div';
+---
+
+<Tag
+  href={published ? toolUrl(tool.slug) : undefined}
+  class={cn(cardClass, 'flex h-full flex-col gap-3', published ? cardLinkClass : 'opacity-80')}
+>
+  <div class="flex items-start justify-between gap-3">
+    <span class="flex size-11 shrink-0 items-center justify-center rounded-control bg-brand-50 text-brand-700 dark:bg-brand-700/20 dark:text-brand-200">
+      <Icon name={tool.icon} class="size-6" />
+    </span>
+    {!published && <Badge>Coming soon</Badge>}
+    {tool.status === 'beta' && <Badge>Beta</Badge>}
+  </div>
+  <div>
+    {showCategory && (
+      <p class="mb-1 text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400">
+        {getCategory(tool.category).shortName}
+      </p>
+    )}
+    <Heading class="font-semibold text-slate-900 dark:text-white">{tool.name}</Heading>
+    <p class="mt-1 line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-400">{tool.description}</p>
+  </div>
+</Tag>

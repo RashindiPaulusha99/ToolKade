@@ -1,0 +1,129 @@
+---
+import type { MarkdownHeading } from 'astro';
+import AdSlot from '@/components/ads/AdSlot.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
+import ToolCTA from '@/components/blog/ToolCTA.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { blogPostingSchema, faqSchema } from '@/components/seo/schema';
+import FAQ from '@/components/tool/FAQ.astro';
+import RelatedTools from '@/components/tool/RelatedTools.astro';
+import Badge from '@/components/ui/Badge.astro';
+import { cn, containerClass, h1Class } from '@/components/ui/styles';
+import { getCategory, type CategoryId } from '@/data/categories';
+import type { BlogPost } from '@/lib/blog';
+import { postOgImage, postUrl } from '@/lib/blog';
+import { formatDate, toIsoDate } from '@/lib/format';
+import { readingTime } from '@/lib/readingTime';
+import { getTool } from '@/lib/tools';
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  post: BlogPost;
+  headings: MarkdownHeading[];
+}
+
+const { post, headings } = Astro.props;
+const { title, description, publishDate, updatedDate, author, heroImage, heroAlt, faqs, draft } = post.data;
+const modified = updatedDate ?? publishDate;
+const minutes = readingTime(post.body ?? '');
+const tool = getTool(post.data.tool);
+const category = getCategory(post.data.category as CategoryId);
+const ogImage = postOgImage(post.id);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={ogImage}
+  imageAlt={heroAlt ?? title}
+  type="article"
+  noindex={draft}
+  publishedTime={publishDate.toISOString()}
+  modifiedTime={modified.toISOString()}
+  jsonLd={[
+    blogPostingSchema({
+      title,
+      description,
+      path: postUrl(post.id),
+      image: ogImage,
+      datePublished: publishDate.toISOString(),
+      dateModified: modified.toISOString(),
+      author,
+    }),
+    faqSchema(faqs),
+  ]}
+>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs
+      items={[
+        { name: 'Blog', href: '/blog/' },
+        { name: title, href: postUrl(post.id) },
+      ]}
+    />
+
+    <article class="mx-auto mt-6 max-w-3xl">
+      <header>
+        {draft && <Badge class="mb-3">Draft: not published in production</Badge>}
+        <p class="text-sm font-medium tracking-wide text-brand-700 uppercase dark:text-brand-300">
+          {category.name}
+        </p>
+        <h1 class={cn(h1Class, 'mt-2')}>{title}</h1>
+        <p class="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-400">{description}</p>
+        <div class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
+          <span>By {author}</span>
+          <span aria-hidden="true">·</span>
+          <span>
+            Published <time datetime={toIsoDate(publishDate)}>{formatDate(publishDate)}</time>
+          </span>
+          {updatedDate && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                Last updated <time datetime={toIsoDate(updatedDate)}>{formatDate(updatedDate)}</time>
+              </span>
+            </>
+          )}
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min read</span>
+        </div>
+      </header>
+
+      {heroImage && (
+        <Image
+          src={heroImage}
+          alt={heroAlt ?? ''}
+          widths={[400, 800, 1200]}
+          sizes="(min-width: 768px) 768px, 100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="mt-8 w-full rounded-card"
+        />
+      )}
+
+      {tool && <ToolCTA slug={tool.slug} />}
+
+      <div class="mt-8">
+        <TableOfContents headings={headings} />
+      </div>
+
+      <div class="prose mt-8 max-w-none prose-slate dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-brand-700 dark:prose-a:text-brand-300">
+        <slot />
+      </div>
+
+      <AdSlot size="rectangle" />
+
+      <div class="mt-12">
+        <FAQ faqs={faqs} />
+      </div>
+
+      {tool && <ToolCTA slug={tool.slug} />}
+    </article>
+
+    {tool && (
+      <div class="mt-12">
+        <RelatedTools tool={tool} />
+      </div>
+    )}
+  </div>
+</BaseLayout>

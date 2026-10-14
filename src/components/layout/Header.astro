@@ -1,0 +1,57 @@
+---
+import { containerClass, cn } from '@/components/ui/styles';
+import { site } from '@/data/site';
+import MegaMenu from './MegaMenu.astro';
+import MobileNav from './MobileNav.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import ToolSearch from './ToolSearch.astro';
+import { primaryNav } from './nav';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const [home, ...rest] = primaryNav.filter((item) => item.href !== '/tools/');
+const navLinkClass =
+  'inline-flex min-h-11 items-center rounded-control px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 aria-[current=page]:text-brand-700 motion-reduce:transition-none dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:aria-[current=page]:text-brand-300';
+---
+
+<!-- No backdrop-filter here: it would turn the fixed mobile drawer into a child of the header box. -->
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-950/95">
+  <div class={cn(containerClass, 'relative flex h-16 items-center gap-4')}>
+    <a
+      href="/"
+      class="flex shrink-0 items-center gap-2 rounded-control focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+      aria-label={`${site.name} home`}
+    >
+      <img src="/favicon.svg" alt="" width="32" height="32" class="size-8" />
+      <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        Tool<span class="text-brand-600 dark:text-brand-300">Kade</span>
+      </span>
+    </a>
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        <li>
+          <a href={home.href} class={navLinkClass} aria-current={isCurrent(home.href) ? 'page' : undefined}>
+            {home.label}
+          </a>
+        </li>
+        <li>
+          <MegaMenu />
+        </li>
+        {rest.map((item) => (
+          <li>
+            <a href={item.href} class={navLinkClass} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-1">
+      <ToolSearch id="header-tool-search" class="mr-2 hidden w-64 lg:block xl:w-72" />
+      <ThemeToggle />
+      <MobileNav />
+    </div>
+  </div>
+</header>

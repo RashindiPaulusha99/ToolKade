@@ -1,0 +1,49 @@
+---
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  heading="Disclaimer"
+  updated={site.legalUpdated}
+  title="Disclaimer"
+  description="ToolKade's calculators give estimates for guidance only and are not financial, tax or legal advice. Confirm important figures with the official authority."
+>
+  <h2>Estimates, not advice</h2>
+  <p>
+    The calculators and tools on {site.name} are provided for general information and guidance only. Results
+    are estimates and are <strong>not</strong> financial, tax, legal, customs or professional advice.
+  </p>
+
+  <h2>Rates can change</h2>
+  <p>
+    Sri Lankan tax brackets, EPF and ETF rules, vehicle import duties, electricity tariffs and similar figures
+    are set by government bodies and change from time to time, sometimes at short notice. Each calculator
+    shows the date we last verified its rates and links to the official source. If a rate has changed since
+    then, the result may be wrong.
+  </p>
+
+  <h2>Check with the official authority</h2>
+  <p>Before you make a financial decision, confirm the figures with the relevant authority, for example:</p>
+  <ul>
+    <li>Inland Revenue Department (APIT and income tax)</li>
+    <li>Sri Lanka Customs and the Ministry of Finance (vehicle import duty)</li>
+    <li>
+      Ceylon Electricity Board, LECO and the Public Utilities Commission of Sri Lanka (electricity tariffs)
+    </li>
+    <li>Your bank or leasing company (loan and leasing terms)</li>
+  </ul>
+
+  <h2>No liability</h2>
+  <p>
+    {site.name} does not accept liability for any loss or damage caused by relying on results from this site.
+    See our
+    <a href="/terms/">terms of use</a>.
+  </p>
+
+  <h2>Spotted an error?</h2>
+  <p>
+    If you notice a rate that has changed or a result that looks wrong, please <a href="/contact/">tell us</a>{' '}
+    so we can fix it quickly.
+  </p>
+</PageLayout>

@@ -1,0 +1,138 @@
+---
+import PostCard from '@/components/blog/PostCard.astro';
+import ToolSearch from '@/components/layout/ToolSearch.astro';
+import { organizationSchema, websiteSchema } from '@/components/seo/schema';
+import ToolGrid from '@/components/tool/ToolGrid.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { bodyClass, cardClass, cardLinkClass, cn, containerClass, h2Class } from '@/components/ui/styles';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedPosts } from '@/lib/blog';
+import { categoryUrl, getCategoriesWithTools, getPopularTools, isPublished } from '@/lib/tools';
+
+const groups = getCategoriesWithTools();
+const popular = getPopularTools(8);
+const latestPosts = (await getPublishedPosts()).slice(0, 3);
+
+const promises = [
+  { icon: 'BadgeCheck', title: 'Free to use', text: 'No sign-up and no paywalls on the core tools.' },
+  {
+    icon: 'ShieldCheck',
+    title: 'Private by design',
+    text: 'Everything runs in your browser. Your files and numbers never leave your device.',
+  },
+  {
+    icon: 'CalendarCheck',
+    title: 'Rates you can check',
+    text: 'Every Sri Lankan calculator shows its official source and the date we last verified it.',
+  },
+];
+---
+
+<BaseLayout
+  title="Free Online Tools & Sri Lanka Calculators"
+  description="Free online tools for Sri Lanka: APIT salary, vehicle import duty and electricity bill calculators, plus image, PDF, developer and text tools in your browser."
+  jsonLd={[websiteSchema(), organizationSchema()]}
+>
+  <section class="border-b border-slate-200 bg-linear-to-b from-brand-50 to-white dark:border-slate-800 dark:from-brand-900/40 dark:to-slate-950">
+    <div class={cn(containerClass, 'py-12 md:py-20')}>
+      <div class="max-w-3xl">
+        <p class="text-sm font-semibold tracking-wide text-brand-700 uppercase dark:text-brand-300">
+          Free, fast and private
+        </p>
+        <h1 class="mt-3 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl dark:text-white">
+          Free online tools and Sri Lanka calculators
+        </h1>
+        <p class="mt-5 text-lg leading-8 text-slate-700 dark:text-slate-300">
+          Work out your take-home pay after APIT, estimate vehicle import duty, check your CEB bill, and
+          compress images or format JSON. Everything runs in your browser, so it is quick even on a slow
+          connection.
+        </p>
+        <ToolSearch
+          id="home-tool-search"
+          label="Search all tools"
+          placeholder="What do you need? e.g. salary, duty, JSON"
+          class="mt-8 max-w-xl"
+        />
+      </div>
+    </div>
+  </section>
+
+  <div class={cn(containerClass, 'space-y-16 py-12 md:py-16')}>
+    <section aria-labelledby="categories">
+      <h2 id="categories" class={h2Class}>
+        Browse by category
+      </h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {groups.map(({ category, tools }) => {
+          const live = tools.filter(isPublished).length;
+          return (
+            <li>
+              <a href={categoryUrl(category.id)} class={cn(cardClass, cardLinkClass, 'flex h-full gap-4')}>
+                <span class="flex size-12 shrink-0 items-center justify-center rounded-control bg-brand-50 text-brand-700 dark:bg-brand-700/20 dark:text-brand-200">
+                  <Icon name={category.icon} class="size-6" />
+                </span>
+                <span>
+                  <span class="block font-semibold text-slate-900 dark:text-white">{category.name}</span>
+                  <span class="mt-1 block text-sm text-slate-600 dark:text-slate-400">
+                    {live > 0
+                      ? `${live} tool${live === 1 ? '' : 's'}`
+                      : tools.length > 0
+                        ? `${tools.length} coming soon`
+                        : 'Coming soon'}
+                  </span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section aria-labelledby="popular-tools">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="popular-tools" class={h2Class}>
+          Popular tools
+        </h2>
+        <a href="/tools/" class="text-sm font-medium text-brand-700 hover:underline dark:text-brand-300">
+          All tools
+        </a>
+      </div>
+      <ToolGrid tools={popular} showCategory class="mt-6" />
+    </section>
+
+    <section aria-labelledby="why-toolkade" class="grid gap-6 md:grid-cols-3">
+      <h2 id="why-toolkade" class="sr-only">
+        Why use ToolKade
+      </h2>
+      {promises.map((item) => (
+        <div class="flex gap-4">
+          <Icon name={item.icon} class="mt-1 size-6 shrink-0 text-brand-600 dark:text-brand-300" />
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+            <p class={cn(bodyClass, 'mt-1 text-sm leading-6')}>{item.text}</p>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    {latestPosts.length > 0 && (
+      <section aria-labelledby="latest-posts">
+        <div class="flex items-end justify-between gap-4">
+          <h2 id="latest-posts" class={h2Class}>
+            Latest guides
+          </h2>
+          <a href="/blog/" class="text-sm font-medium text-brand-700 hover:underline dark:text-brand-300">
+            All posts
+          </a>
+        </div>
+        <ul class="mt-6 grid gap-4 md:grid-cols-3">
+          {latestPosts.map((post) => (
+            <li>
+              <PostCard post={post} headingLevel="h3" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>

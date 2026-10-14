@@ -1,0 +1,20 @@
+---
+import { icons } from 'lucide-react';
+
+interface Props {
+  /** lucide icon name in PascalCase, e.g. "Car". */
+  name: string;
+  class?: string;
+  /** Accessible label. Omit for decorative icons (rendered with aria-hidden). */
+  label?: string;
+}
+
+const { name, class: className = 'size-5', label } = Astro.props;
+const Component = icons[name as keyof typeof icons] ?? icons.Wrench;
+---
+
+{label ? (
+  <Component className={className} aria-label={label} role="img" />
+) : (
+  <Component className={className} aria-hidden="true" />
+)}

@@ -1,0 +1,72 @@
+---
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { bodyClass, buttonVariants, cardClass, cn, containerClass, h1Class } from '@/components/ui/styles';
+import type { BlogPost } from '@/lib/blog';
+import PostCard from './PostCard.astro';
+
+/** Shared body of /blog/ and /blog/page/<n>/. */
+interface Props {
+  posts: BlogPost[];
+  currentPage: number;
+  lastPage: number;
+}
+
+const { posts, currentPage, lastPage } = Astro.props;
+const pageUrl = (page: number) => (page === 1 ? '/blog/' : `/blog/page/${page}/`);
+---
+
+<div class={cn(containerClass, 'py-6 md:py-10')}>
+  <Breadcrumbs
+    items={[
+      { name: 'Blog', href: '/blog/' },
+      ...(currentPage > 1 ? [{ name: `Page ${currentPage}`, href: pageUrl(currentPage) }] : []),
+    ]}
+  />
+  <header class="mt-6 max-w-3xl">
+    <h1 class={h1Class}>ToolKade Blog{currentPage > 1 && `: page ${currentPage}`}</h1>
+    <p class={cn(bodyClass, 'mt-3 text-lg')}>
+      Plain-English guides to Sri Lankan tax, duty and utility bills, and how-tos for everyday image, PDF and
+      developer tasks. Each guide links to a free tool so you can try it yourself.
+    </p>
+  </header>
+
+  {posts.length > 0 ? (
+    <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <li>
+          <PostCard post={post} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class={cn(cardClass, bodyClass, 'mt-10')}>
+      Our first guides are being written. Meanwhile, explore the{' '}
+      <a href="/tools/" class="font-medium text-brand-700 underline dark:text-brand-300">
+        free tools
+      </a>
+      .
+    </p>
+  )}
+
+  {lastPage > 1 && (
+    <nav aria-label="Blog pages" class="mt-10 flex items-center justify-between gap-4">
+      {currentPage > 1 ? (
+        <a href={pageUrl(currentPage - 1)} class={buttonVariants.secondary} rel="prev">
+          Newer posts
+        </a>
+      ) : (
+        <span />
+      )}
+      <span class="text-sm text-slate-500 dark:text-slate-400">
+        Page {currentPage} of {lastPage}
+      </span>
+      {currentPage < lastPage ? (
+        <a href={pageUrl(currentPage + 1)} class={buttonVariants.secondary} rel="next">
+          Older posts
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )}
+</div>

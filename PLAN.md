@@ -17,7 +17,7 @@
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | **Astro 5** (static output) | Ships zero JS by default, which suits SEO and Core Web Vitals |
+| Framework | **Astro 7** (static output; Astro 5 has unpatched security advisories) | Ships zero JS by default, which suits SEO and Core Web Vitals |
 | Interactive tools | **React islands** (`client:visible`) | Lets you reuse your React skills; JS loads only where a tool needs it |
 | Styling | **Tailwind CSS** | Fast, consistent, small CSS |
 | Blog | **Astro Content Collections + MDX** | Type-safe frontmatter; MDX can embed the tool inside a post |

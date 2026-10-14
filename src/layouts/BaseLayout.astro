@@ -1,0 +1,78 @@
+---
+import '@fontsource-variable/inter';
+import '@/styles/global.css';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import SEO, { type SEOProps } from '@/components/seo/SEO.astro';
+import { serializeJsonLd } from '@/components/seo/schema';
+import { getCategory } from '@/data/categories';
+import { site } from '@/data/site';
+import { tools } from '@/data/tools';
+import { adsEnabled, adsenseClient } from '@/lib/ads';
+import type { SearchItem } from '@/lib/search';
+import { isPublished, toolUrl } from '@/lib/tools';
+
+type Props = SEOProps;
+
+const searchItems: SearchItem[] = tools.map((tool) => ({
+  slug: tool.slug,
+  name: tool.name,
+  url: toolUrl(tool.slug),
+  category: getCategory(tool.category).name,
+  keywords: tool.keywords,
+  published: isPublished(tool),
+}));
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f6b62" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} blog`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Apply the saved or system theme before first paint to avoid a flash. -->
+    <script is:inline>
+      (() => {
+        let dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        try {
+          const saved = localStorage.getItem('theme');
+          if (saved === 'dark' || saved === 'light') dark = saved === 'dark';
+        } catch {
+          // Storage unavailable: fall back to the system preference.
+        }
+        document.documentElement.classList.toggle('dark', dark);
+      })();
+    </script>
+    <SEO {...Astro.props} />
+
+    {adsEnabled() && (
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient()}`}
+        crossorigin="anonymous"
+      />
+    )}
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="sr-only z-50 rounded-control bg-brand-700 px-4 py-2 font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline type="application/json" id="tool-search-data" set:html={serializeJsonLd(searchItems)} />
+  </body>
+</html>

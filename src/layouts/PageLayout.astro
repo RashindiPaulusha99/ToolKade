@@ -1,0 +1,33 @@
+---
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import type { SEOProps } from '@/components/seo/SEO.astro';
+import { cn, containerClass, h1Class } from '@/components/ui/styles';
+import { formatDate, toIsoDate } from '@/lib/format';
+import BaseLayout from './BaseLayout.astro';
+
+/** Simple prose page (About, legal pages). */
+interface Props extends SEOProps {
+  heading: string;
+  /** Shown as "Last updated" under the heading. */
+  updated?: string;
+}
+
+const { heading, updated, ...seo } = Astro.props;
+---
+
+<BaseLayout {...seo}>
+  <div class={cn(containerClass, 'py-6 md:py-10')}>
+    <Breadcrumbs items={[{ name: heading, href: Astro.url.pathname }]} />
+    <article class="mx-auto mt-6 max-w-3xl">
+      <h1 class={h1Class}>{heading}</h1>
+      {updated && (
+        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
+          Last updated <time datetime={toIsoDate(updated)}>{formatDate(updated)}</time>
+        </p>
+      )}
+      <div class="prose mt-8 max-w-none prose-slate dark:prose-invert prose-a:text-brand-700 dark:prose-a:text-brand-300">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
