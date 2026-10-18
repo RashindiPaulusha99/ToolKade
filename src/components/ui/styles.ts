@@ -12,16 +12,33 @@ export const cardLinkClass =
 
 const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500';
 
-const buttonBase = `inline-flex min-h-11 items-center justify-center gap-2 rounded-control px-4 py-2.5 font-medium transition-colors duration-150 motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`;
+const buttonCore = `inline-flex min-h-11 items-center justify-center gap-2 rounded-control font-medium transition-colors duration-150 motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`;
 
-export const buttonVariants = {
+const variantColors = {
   // brand-600 rather than brand-500: white text on brand-500 is just under WCAG AA (4.49:1).
-  primary: `${buttonBase} bg-brand-600 text-white hover:bg-brand-700`,
-  secondary: `${buttonBase} border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800`,
-  ghost: `${buttonBase} text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800`,
+  primary: 'bg-brand-600 text-white hover:bg-brand-700',
+  secondary:
+    'border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800',
+  ghost: 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
 } as const;
 
-export type ButtonVariant = keyof typeof buttonVariants;
+export type ButtonVariant = keyof typeof variantColors;
+
+export const buttonVariants: Record<ButtonVariant, string> = {
+  primary: `${buttonCore} px-4 py-2.5 ${variantColors.primary}`,
+  secondary: `${buttonCore} px-4 py-2.5 ${variantColors.secondary}`,
+  ghost: `${buttonCore} px-4 py-2.5 ${variantColors.ghost}`,
+};
+
+/**
+ * Square 44px icon-only buttons. A separate variant (not buttonVariants + "px-0") because without
+ * class merging, `px-4` would win over `px-0` and squash the icon.
+ */
+export const iconButtonVariants: Record<ButtonVariant, string> = {
+  primary: `${buttonCore} size-11 shrink-0 ${variantColors.primary}`,
+  secondary: `${buttonCore} size-11 shrink-0 ${variantColors.secondary}`,
+  ghost: `${buttonCore} size-11 shrink-0 ${variantColors.ghost}`,
+};
 
 export const inputClass =
   'w-full rounded-control border border-slate-300 bg-white px-3 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100';

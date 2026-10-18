@@ -1,6 +1,6 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
-import { buttonVariants, cn } from '@/components/ui/styles';
+import { cn, iconButtonVariants } from '@/components/ui/styles';
 
 interface Props {
   class?: string;
@@ -11,7 +11,7 @@ interface Props {
   type="button"
   data-theme-toggle
   aria-label="Switch to dark mode"
-  class={cn(buttonVariants.ghost, 'size-11 px-0', Astro.props.class)}
+  class={cn(iconButtonVariants.ghost, Astro.props.class)}
 >
   <Icon name="Moon" class="size-5 dark:hidden" />
   <Icon name="Sun" class="hidden size-5 dark:block" />

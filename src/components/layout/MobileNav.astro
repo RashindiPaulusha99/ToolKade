@@ -1,6 +1,6 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
-import { buttonVariants, cn } from '@/components/ui/styles';
+import { cn, iconButtonVariants } from '@/components/ui/styles';
 import { categoryUrl, getCategoriesWithTools, isPublished, toolUrl } from '@/lib/tools';
 import ToolSearch from './ToolSearch.astro';
 import { primaryNav } from './nav';
@@ -13,7 +13,7 @@ const linkClass =
 <div data-mobile-nav class="lg:hidden">
   <button
     type="button"
-    class={cn(buttonVariants.ghost, 'size-11 px-0')}
+    class={iconButtonVariants.ghost}
     aria-expanded="false"
     aria-controls="mobile-drawer"
     aria-label="Open menu"
@@ -32,12 +32,7 @@ const linkClass =
   >
     <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-800">
       <span class="text-lg font-bold text-brand-700 dark:text-brand-300">Menu</span>
-      <button
-        type="button"
-        class={cn(buttonVariants.ghost, 'size-11 px-0')}
-        aria-label="Close menu"
-        data-drawer-close
-      >
+      <button type="button" class={iconButtonVariants.ghost} aria-label="Close menu" data-drawer-close>
         <Icon name="X" class="size-6" />
       </button>
     </div>

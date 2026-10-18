@@ -127,9 +127,9 @@ export const tools: ToolMeta[] = [
     icon: 'ImageDown',
     blogSlug: 'how-to-compress-images-without-losing-quality',
     related: ['json-formatter', 'word-counter', 'sinhala-unicode-converter'],
-    status: 'coming-soon',
-    publishedAt: '2026-10-14',
-    updatedAt: '2026-10-14',
+    status: 'live',
+    publishedAt: '2026-10-18',
+    updatedAt: '2026-10-18',
   },
   {
     slug: 'json-formatter',

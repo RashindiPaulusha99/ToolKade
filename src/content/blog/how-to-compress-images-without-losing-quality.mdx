@@ -1,0 +1,90 @@
+---
+title: 'How to Compress Images Without Losing Quality'
+description: 'Make JPG, PNG and WebP images smaller without visible quality loss: pick the right format, quality setting and size, with a step-by-step example.'
+tool: image-compressor
+category: image
+publishDate: 2026-10-18
+updatedDate: 2026-10-18
+author: 'ToolKade Team'
+tags: ['image compression', 'webp', 'jpg', 'png', 'website speed']
+faqs:
+  - q: 'What is the best quality setting for JPG and WebP?'
+    a: 'For photos, 70–85% is a good starting point. Check the result at the size people will see it; if you cannot spot a difference, try going a little lower.'
+  - q: 'Is WebP supported everywhere?'
+    a: 'All modern browsers, including Chrome, Safari, Firefox and Edge, display WebP. Some older desktop software and printers may not, so keep a JPG copy if you need to send the file outside the web.'
+  - q: 'Does resizing an image reduce quality?'
+    a: 'Scaling down removes pixels you do not need for the size the image is shown at, so it does not look worse on screen. Avoid scaling an image up, which only makes it blurrier and bigger.'
+  - q: 'Why are my phone photos so large?'
+    a: 'Phone cameras capture several thousand pixels across and save at high quality so you can crop and print. For sharing online, a smaller size and slightly lower quality are almost always enough.'
+draft: true
+---
+
+export const camera = { width: 4032, height: 3024 };
+export const target = { width: 1600, height: Math.round(3024 * (1600 / 4032)) };
+export const megapixels = (s) => ((s.width * s.height) / 1_000_000).toFixed(1);
+export const share = Math.round(((target.width * target.height) / (camera.width * camera.height)) * 100);
+
+{/* TODO(human review before publishing): add a real before/after example from your own photo (original size, settings used, new size) using the tool, then remove draft: true. No file sizes below are measured; only pixel arithmetic is shown. */}
+
+Large images slow down websites, fill up phones and bounce off email size limits. The good news is that you can usually make them several times smaller with no difference anyone will notice. This guide explains **how to compress images without losing quality**, step by step. To try it on your own photos, use our free [image compressor](/tools/image-compressor/). Your files never leave your device.
+
+## Why images are bigger than they need to be
+
+Most images are saved with far more detail than the place they are shown in can display:
+
+- **Too many pixels.** A phone photo is often around 4,000 pixels wide, while a phone screen, a blog post or an email preview shows a fraction of that.
+- **More quality than the eye can see.** Cameras save at very high quality settings so photos can be edited and printed.
+- **The wrong format.** A photo saved as PNG can be many times larger than the same photo as JPG or WebP.
+
+Fix those three things and most of the file size disappears.
+
+## How to compress images without losing quality
+
+### 1. Resize to the size you actually need
+
+Resizing is the single biggest saving, because file size grows with the number of pixels, which grows with width *times* height.
+
+For example, a typical <strong>{camera.width} × {camera.height}</strong> phone photo has <strong>{megapixels(camera)} megapixels</strong>. Scaled to <strong>{target.width}</strong> pixels wide, it becomes <strong>{target.width} × {target.height}</strong>, just <strong>{megapixels(target)} megapixels</strong>, about <strong>{share}%</strong> of the original pixel count, and still sharper than most screens need for a full-width image.
+
+Good targets:
+
+| Where the image goes | Width to aim for |
+| --- | --- |
+| Full-width website banner | 1,920 px |
+| Blog post or article image | 1,200–1,600 px |
+| Email or social media post | 1,080–1,600 px |
+| Thumbnail or profile picture | 400–800 px |
+
+### 2. Choose the right format
+
+- **WebP**: usually the smallest file for the same visual quality. Supported by all modern browsers.
+- **JPG**: the most compatible choice for photos, including older software.
+- **PNG**: lossless, best for screenshots, logos and graphics with transparency or sharp text. Avoid it for photos.
+
+### 3. Lower the quality a little
+
+JPG and WebP let you choose a **quality** level. They save space by discarding fine detail that is hard to see. Between about 70% and 85%, most photos look the same as the original. Go lower only if you need a very small file, and check for blocky edges or smudged skin tones.
+
+### 4. Compare before you delete
+
+Look at the compressed image at the size people will see it. If it looks the same, you are done. Keep your original for printing or future editing.
+
+<ToolCTA slug="image-compressor" label="Compress your images" />
+
+## Common mistakes and tips
+
+**Compressing the same JPG again and again.** Each lossy save discards a little more detail. Always compress from the original, not from an already compressed copy.
+
+**Using PNG for photos.** PNG keeps every pixel exactly, which makes photos huge. Convert photos to WebP or JPG.
+
+**Scaling images up.** Enlarging a small image makes the file bigger and the picture blurrier. Only scale down.
+
+**Forgetting about privacy.** Photos can carry hidden data such as the GPS location where they were taken. Re-saving through a compressor that strips metadata removes it.
+
+**Uploading private photos to unknown websites.** Many online compressors upload your files to their servers. A browser-based tool processes them on your own device instead.
+
+## Conclusion
+
+To compress images without losing quality, resize them to the size they will be shown at, pick the right format (WebP or JPG for photos, PNG for graphics) and use a quality setting around 70–85%. Together these usually shrink files dramatically with no visible difference.
+
+Try it now with the [image compressor](/tools/image-compressor/), which runs entirely in your browser. For Sinhala text, try the [Sinhala Unicode to FM Abhaya converter](/tools/sinhala-unicode-converter/), or browse all our [free tools](/tools/).
