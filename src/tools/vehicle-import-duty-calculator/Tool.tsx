@@ -278,7 +278,7 @@ export default function VehicleImportDutyTool({ rates }: Props) {
                 Total duties and taxes
               </h2>
               <p className={resultFigureClass}>{formatLKR(outcome.result.totalTax)}</p>
-              <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
+              <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
                 <div>
                   <dt className="text-slate-600 dark:text-slate-400">Estimated landed cost</dt>
                   <dd className="text-lg font-semibold text-slate-900 dark:text-white">

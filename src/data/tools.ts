@@ -95,9 +95,9 @@ export const tools: ToolMeta[] = [
     icon: 'Calculator',
     blogSlug: 'flat-rate-vs-reducing-balance-leasing',
     related: ['vehicle-import-duty-calculator', 'salary-apit-calculator', 'electricity-bill-calculator'],
-    status: 'coming-soon',
-    publishedAt: '2026-10-14',
-    updatedAt: '2026-10-14',
+    status: 'live',
+    publishedAt: '2026-10-18',
+    updatedAt: '2026-10-18',
   },
   {
     slug: 'electricity-bill-calculator',

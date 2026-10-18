@@ -22,6 +22,11 @@
   --color-accent-500: #e08e0b;
   --color-accent-700: #8a5306; /* text on light amber backgrounds (AA contrast) */
 
+  /* Chart series (validated with the dataviz palette checker, light surface).
+     Dark mode uses brand-400 for series 1 and the same series 2. */
+  --color-chart-1: #00897b;
+  --color-chart-2: #d4790a;
+
   /* Semantic */
   --color-success: #16a34a;
   --color-warning: #d97706;

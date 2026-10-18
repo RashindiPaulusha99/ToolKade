@@ -1,0 +1,98 @@
+---
+title: 'Flat Rate vs Reducing Balance: Leasing in Sri Lanka Explained'
+description: 'Why a flat leasing rate costs far more than it looks. Compare flat and reducing balance rates with a worked example and learn how to compare offers.'
+tool: loan-emi-calculator
+category: sri-lanka
+publishDate: 2026-10-18
+updatedDate: 2026-10-18
+author: 'ToolKade Team'
+tags: ['leasing', 'loans', 'interest rates', 'emi', 'vehicle finance']
+faqs:
+  - q: 'Is a flat rate always worse than a reducing balance rate?'
+    a: 'For the same headline number, yes: a flat rate charges interest on the full amount for the whole term, so it always costs more. A flat-rate offer can still be the better deal if its rate is low enough, which is why you should convert it to a reducing-balance rate before comparing.'
+  - q: 'Can I pay off a lease early?'
+    a: 'Usually, but the terms vary. Some lenders charge an early settlement fee, and with flat-rate leases the interest saved by settling early depends on how the lender allocates interest across the months. Ask your lender for a settlement quote.'
+  - q: 'Why do leasing companies quote flat rates?'
+    a: 'Flat rates are simple to calculate and easy to compare between leases of the same length. They also look lower than the equivalent reducing-balance rate, so always check what the offer works out to on a reducing balance.'
+  - q: 'Does the term change the difference between flat and reducing rates?'
+    a: 'Yes. The longer the term, the more interest you pay on money you have already repaid, so the gap between a flat rate and its reducing-balance equivalent grows with the length of the lease.'
+draft: true
+---
+
+import { calculateLoan } from '@/tools/loan-emi-calculator/logic';
+import { formatLKR, formatNumber } from '@/lib/format';
+
+export const amount = 4000000;
+export const rate = 12;
+export const months = 60;
+export const flat = calculateLoan({ amount, annualRate: rate, months, method: 'flat' }).result;
+export const reducing = calculateLoan({ amount, annualRate: rate, months, method: 'reducing' }).result;
+
+{/* TODO(human review before publishing): the rate and amount below are illustrative, not market rates. Add a real example of a current leasing offer if you have one (without naming the lender if you prefer), then remove draft: true. All figures are computed by the calculator at build time. */}
+
+When you compare vehicle leasing offers in Sri Lanka, you will often see a **flat rate** quoted, while bank loans usually quote a **reducing balance** rate. They look like the same kind of number, but they are not. This guide explains **flat rate vs reducing balance** interest, shows how much the difference can cost you, and how to compare offers fairly. To check an offer now, use our [loan and leasing EMI calculator](/tools/loan-emi-calculator/).
+
+## What is a reducing balance rate?
+
+With a **reducing balance** rate, the lender charges interest each month only on the money you **still owe**.
+
+Your monthly instalment (EMI) stays the same, but the split inside it changes. Early on, much of each payment is interest. As the balance falls, the interest part shrinks and more of your payment goes towards the principal. Most bank personal loans, housing loans and many vehicle loans work this way.
+
+## What is a flat rate?
+
+With a **flat rate**, interest is worked out on the **full amount you borrowed, for the whole term**, as if you never repaid any of it:
+
+- **Total interest** = amount × rate × number of years
+- **Monthly instalment** = (amount + total interest) ÷ number of months
+
+It is simple, which is why it is popular in leasing. The catch is that you keep paying interest on money you have already paid back.
+
+## Flat rate vs reducing balance: a worked example
+
+Take a lease or loan of <strong>{formatLKR(amount)}</strong> over <strong>{months / 12} years</strong>, at a headline rate of <strong>{rate}%</strong> a year. (These are example figures, not current market rates.)
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>{rate}% flat rate</th>
+      <th>{rate}% reducing balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Monthly instalment</td><td>{formatLKR(flat.instalment)}</td><td>{formatLKR(reducing.instalment)}</td></tr>
+    <tr><td>Total interest</td><td>{formatLKR(flat.totalInterest)}</td><td>{formatLKR(reducing.totalInterest)}</td></tr>
+    <tr><td>Total payable</td><td>{formatLKR(flat.totalPayable)}</td><td>{formatLKR(reducing.totalPayable)}</td></tr>
+  </tbody>
+</table>
+
+The same "{rate}%" costs <strong>{formatLKR(flat.totalInterest - reducing.totalInterest)}</strong> more in interest on a flat rate. In fact, a {rate}% flat rate here works out to about <strong>{formatNumber(flat.equivalentReducingRate, 1)}%</strong> on a reducing balance.
+
+### Why the gap is so big
+
+On a reducing balance, by the final year you are only paying interest on a small remaining balance. On a flat rate, you are still paying interest on the full {formatLKR(amount)} in month {months}, even though you have repaid almost all of it.
+
+<ToolCTA slug="loan-emi-calculator" label="Compare your leasing offer" />
+
+## How to compare leasing and loan offers
+
+1. **Find out how each rate is quoted.** Ask directly: "Is this a flat rate or a reducing balance rate?" It should be stated in the offer.
+2. **Convert to the same type of rate.** Put a flat-rate offer into the calculator with "Flat rate" selected and note the equivalent reducing-balance rate.
+3. **Compare like with like.** The offer with the lower reducing-balance rate costs less interest, for the same amount and term.
+4. **Add the fees.** Documentation charges, insurance, valuation fees and stamp duty can change which offer is cheaper overall.
+
+## Common mistakes and tips
+
+**Comparing a flat rate with a reducing rate directly.** A lower flat rate can still be far more expensive than a higher reducing-balance rate. Always convert first.
+
+**Focusing only on the monthly instalment.** A longer term lowers the instalment but increases the total interest, especially on a flat rate.
+
+**Forgetting the down payment.** Enter the amount you will actually finance, after the down payment, not the full vehicle price.
+
+**Assuming early settlement saves all the remaining interest.** With flat-rate leases, how much interest you save by settling early depends on the lender's method. Ask for a written settlement quote.
+
+## Conclusion
+
+A flat rate and a reducing-balance rate with the same number are not the same price. Flat-rate interest is charged on the full amount for the whole term, so it can cost close to double the interest of the same reducing-balance rate.
+
+Before you sign, run both offers through the [loan and leasing EMI calculator](/tools/loan-emi-calculator/) and compare their reducing-balance equivalents. Importing a vehicle? Estimate the taxes first with our [vehicle import duty calculator](/tools/vehicle-import-duty-calculator/), and see what your salary leaves you each month with the [salary and APIT calculator](/tools/salary-apit-calculator/).

@@ -1,0 +1,12 @@
+---
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import { getTool } from '@/lib/tools';
+import Tool from '@/tools/loan-emi-calculator/Tool';
+import { content } from '@/tools/loan-emi-calculator/content';
+
+const tool = getTool('loan-emi-calculator')!;
+---
+
+<ToolLayout tool={tool} content={content}>
+  <Tool client:visible />
+</ToolLayout>
