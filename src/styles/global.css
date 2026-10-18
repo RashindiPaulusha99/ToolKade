@@ -30,6 +30,8 @@
   /* Typography */
   --font-sans: 'Inter Variable', 'Inter', 'Noto Sans Sinhala', 'Noto Sans Tamil', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* Legacy Sinhala font for FM Abhaya text; used only if installed on the visitor's device (not hosted). */
+  --font-fm-abhaya: 'FM Abhaya', 'FMAbhaya', 'FM-Abhaya', ui-monospace, monospace;
 
   /* Shape: generates rounded-card and rounded-control utilities */
   --radius-card: 1rem;

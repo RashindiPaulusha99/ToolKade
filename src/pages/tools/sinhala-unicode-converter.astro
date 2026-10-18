@@ -1,0 +1,12 @@
+---
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import { getTool } from '@/lib/tools';
+import Tool from '@/tools/sinhala-unicode-converter/Tool';
+import { content } from '@/tools/sinhala-unicode-converter/content';
+
+const tool = getTool('sinhala-unicode-converter')!;
+---
+
+<ToolLayout tool={tool} content={content}>
+  <Tool client:visible />
+</ToolLayout>

@@ -1,0 +1,54 @@
+---
+import ratesJson from '@/data/rates/apit.json';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import { formatLKR, formatPercent } from '@/lib/format';
+import type { RatesFile } from '@/lib/rates';
+import { getTool } from '@/lib/tools';
+import { calculateApit, type SalaryRates } from '@/tools/salary-apit-calculator/logic';
+import Tool from '@/tools/salary-apit-calculator/Tool';
+import { getContent } from '@/tools/salary-apit-calculator/content';
+
+const tool = getTool('salary-apit-calculator')!;
+const rates = ratesJson as RatesFile<SalaryRates>;
+const content = getContent(rates.data);
+// Monthly bands for the static "How it works" table, derived from the same data as the calculator.
+const monthlyBands = rates.data ? calculateApit(0, rates.data.apit, 12).brackets : [];
+---
+
+<ToolLayout tool={tool} content={content} rates={rates}>
+  <Tool client:visible rates={rates.data} />
+
+  {monthlyBands.length > 0 && (
+    <div slot="how-it-works" class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[18rem] text-left text-sm">
+        <caption class="mb-2 text-left font-semibold text-slate-900 dark:text-white">
+          Monthly APIT bands (IRD Tax Table No. 01)
+        </caption>
+        <thead>
+          <tr class="border-b border-slate-200 text-slate-600 dark:border-slate-800 dark:text-slate-400">
+            <th scope="col" class="py-2 pr-3 font-medium">
+              Monthly pay
+            </th>
+            <th scope="col" class="py-2 text-right font-medium">
+              Tax rate
+            </th>
+          </tr>
+        </thead>
+        <tbody class="tabular-nums">
+          {monthlyBands.map((b) => (
+            <tr class="border-b border-slate-200 last:border-0 dark:border-slate-800">
+              <th scope="row" class="py-2 pr-3 font-normal">
+                {b.to === null
+                  ? `Over ${formatLKR(b.from)}`
+                  : b.rate === 0
+                    ? `Up to ${formatLKR(b.to)}`
+                    : `${formatLKR(b.from)} – ${formatLKR(b.to)}`}
+              </th>
+              <td class="py-2 text-right">{b.rate === 0 ? 'Tax-free (relief)' : formatPercent(b.rate)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</ToolLayout>

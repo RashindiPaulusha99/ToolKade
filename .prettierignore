@@ -6,3 +6,6 @@ package-lock.json
 # Prettier's MDX parser is MDX v1 and corrupts MDX 3 comments ({/* */}), so posts are formatted by hand.
 *.mdx
 README.txt
+# Third-party data kept byte-for-byte as published (see THIRD_PARTY_NOTICES.md).
+src/tools/sinhala-unicode-converter/fm-abhaya.json
+src/tools/sinhala-unicode-converter/fm-abhaya.test-cases.json

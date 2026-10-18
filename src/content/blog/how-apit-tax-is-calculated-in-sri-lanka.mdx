@@ -1,0 +1,162 @@
+---
+title: 'How APIT Tax Is Calculated in Sri Lanka (2026 Guide)'
+description: 'Learn how APIT (PAYE) is calculated on your salary in Sri Lanka: personal relief, tax bands, EPF and ETF, with a worked example of take-home pay.'
+tool: salary-apit-calculator
+category: sri-lanka
+publishDate: 2026-10-18
+updatedDate: 2026-10-18
+author: 'ToolKade Team'
+tags: ['apit', 'paye', 'income tax', 'epf', 'etf', 'salary']
+faqs:
+  - q: 'Is APIT the same as PAYE?'
+    a: 'Yes, in everyday use. PAYE (Pay As You Earn) was the name of the old scheme. Since the Inland Revenue Act No. 24 of 2017 the tax deducted from employment income is called APIT (Advance Personal Income Tax), but many people and payslips still say PAYE.'
+  - q: 'Does my employer deduct APIT even if I do not ask?'
+    a: 'Yes. IRD Tax Table No. 01 says the deduction must be made compulsorily, regardless of the employeeÃ¢â‚¬â„¢s consent, whenever your pay is above the tax-free relief.'
+  - q: 'Do I still need to file an income tax return?'
+    a: 'APIT is an advance payment of your income tax. Whether you also need to file a return depends on your total income and other sources such as rent or business income. Check the Inland Revenue DepartmentÃ¢â‚¬â„¢s guidance for your situation.'
+  - q: 'What happens to APIT if I change jobs during the year?'
+    a: 'When you join or leave an employer during the year of assessment, the employer uses a different IRD table (Table No. 05) that looks at your cumulative pay, so your deductions in those months may differ from the regular monthly table.'
+draft: true
+---
+
+import ratesFile from '@/data/rates/apit.json';
+import { calculateSalary } from '@/tools/salary-apit-calculator/logic';
+import { formatLKR, formatPercent, formatDate } from '@/lib/format';
+
+export const rates = ratesFile.data;
+export const example = calculateSalary(
+  { salary: 250000, allowances: 50000, period: 'monthly', allowancesInEpf: false },
+  rates,
+).result;
+export const m = example.monthly;
+export const relief = rates.apit.personalReliefAnnual;
+
+{/* TODO(human review before publishing): read through, add a real local example if you have one, then remove draft: true. All figures below are computed from src/data/rates/apit.json at build time. */}
+
+Every month your employer deducts APIT from your salary, but most payslips don't explain how the number is worked out. This guide shows exactly **how APIT tax is calculated in Sri Lanka**: the tax-free relief, the tax bands, how EPF and ETF fit in, and a full worked example. To check your own salary in seconds, use our [salary and APIT calculator](/tools/salary-apit-calculator/).
+
+## What is APIT?
+
+**APIT** stands for **Advance Personal Income Tax**. It is the income tax your employer deducts from your pay each month and sends to the **Inland Revenue Department (IRD)**. You may still hear it called **PAYE** (Pay As You Earn), the name of the older scheme.
+
+Your employer calculates it using tables published by the IRD. For regular monthly pay (salary, allowances and taxable benefits) from your main job, they use **Tax Table No. 01**.
+
+## How APIT tax is calculated in Sri Lanka
+
+### Step 1: Work out your gross regular pay
+
+APIT is charged on your **regular profits from employment**. That includes your salary plus allowances such as travelling, fuel or overtime pay, and the value of taxable non-cash benefits. Your own EPF contribution is **not** subtracted first. Tax is worked out on the full gross amount.
+
+### Step 2: Take off the personal relief
+
+Everyone gets a tax-free **personal relief** of <strong>{formatLKR(relief)}</strong> a year, which the IRD table spreads evenly as <strong>{formatLKR(relief / 12)}</strong> a month. If your monthly pay is at or below that, no APIT is deducted.
+
+### Step 3: Apply the tax bands
+
+Pay above the relief is taxed in bands. Each rate applies **only to the slice of pay inside its band**, never to your whole salary. Here are the monthly bands currently used by the IRD:
+
+<table>
+  <thead>
+    <tr>
+      <th>Monthly pay</th>
+      <th>Tax rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    {example.brackets.map((b) => (
+      <tr>
+        <td>
+          {b.to === null
+            ? `Over ${formatLKR(b.from)}`
+            : b.rate === 0
+              ? `Up to ${formatLKR(b.to)}`
+              : `${formatLKR(b.from)} Ã¢â‚¬â€œ ${formatLKR(b.to)}`}
+        </td>
+        <td>{b.rate === 0 ? 'Tax-free' : formatPercent(b.rate)}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+Because only the extra rupees fall into a higher band, a pay rise can never leave you with less take-home pay than before.
+
+## Where EPF and ETF come in
+
+Two other deductions and contributions appear on most payslips:
+
+- **EPF (Employees' Provident Fund):** you contribute <strong>{formatPercent(rates.epf.employeeRate)}</strong> of your earnings, which is deducted from your pay, and your employer adds <strong>{formatPercent(rates.epf.employerRate)}</strong>.
+- **ETF (Employees' Trust Fund):** your employer pays <strong>{formatPercent(rates.etf.employerRate)}</strong>. Nothing is deducted from you.
+
+EPF and ETF are worked out on your "total earnings" for EPF purposes. That is often your basic salary, sometimes plus certain allowances, so check your payslip to see which amounts your employer includes.
+
+## A worked example
+
+Let's take an employee with a monthly salary of **Rs. 250,000** and allowances of **Rs. 50,000**, where EPF is paid on the salary only.
+
+**Gross pay:** Rs. 250,000 + Rs. 50,000 = <strong>{formatLKR(m.gross)}</strong>.
+
+**APIT, band by band:**
+
+<table>
+  <thead>
+    <tr>
+      <th>Band</th>
+      <th>Rate</th>
+      <th>Pay in band</th>
+      <th>Tax</th>
+    </tr>
+  </thead>
+  <tbody>
+    {example.brackets.filter((b) => b.taxable > 0).map((b) => (
+      <tr>
+        <td>{b.to === null ? `Over ${formatLKR(b.from)}` : `${formatLKR(b.from)} Ã¢â‚¬â€œ ${formatLKR(b.to)}`}</td>
+        <td>{formatPercent(b.rate)}</td>
+        <td>{formatLKR(b.taxable)}</td>
+        <td>{formatLKR(b.tax)}</td>
+      </tr>
+    ))}
+    <tr>
+      <td><strong>Total APIT</strong></td>
+      <td></td>
+      <td></td>
+      <td><strong>{formatLKR(m.apit)}</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+**Take-home pay:**
+
+<table>
+  <tbody>
+    <tr><td>Gross pay</td><td>{formatLKR(m.gross)}</td></tr>
+    <tr><td>Less your EPF ({formatPercent(rates.epf.employeeRate)} of Rs. 250,000)</td><td>Ã¢Ë†â€™{formatLKR(m.epfEmployee)}</td></tr>
+    <tr><td>Less APIT</td><td>Ã¢Ë†â€™{formatLKR(m.apit)}</td></tr>
+    <tr><td><strong>Take-home pay</strong></td><td><strong>{formatLKR(m.takeHome)}</strong></td></tr>
+  </tbody>
+</table>
+
+On top of that, the employer pays <strong>{formatLKR(m.epfEmployer)}</strong> in EPF and <strong>{formatLKR(m.etf)}</strong> in ETF, so this job costs the employer <strong>{formatLKR(m.employerCost)}</strong> a month.
+
+<ToolCTA slug="salary-apit-calculator" label="Calculate your APIT" />
+
+## Common mistakes and tips
+
+**Applying the top rate to your whole salary.** Moving into a higher band only affects the rupees above that band's starting point. Your overall tax rate is always lower than your top band rate.
+
+**Taking EPF off before working out tax.** APIT is charged on gross pay. Your EPF contribution comes out separately and does not reduce the tax.
+
+**Forgetting allowances.** Fuel, travelling and most other allowances are taxable and count towards APIT, even if they are not part of your basic salary.
+
+**Using the monthly table for bonuses.** Bonuses, arrears and other lump-sum payments are taxed using different IRD tables (such as Table No. 02), so a month with a bonus will not match the regular calculation.
+
+**Ignoring a mid-year job change.** If you join or leave a job partway through the year, your employer uses Table No. 05 based on cumulative pay, so the deduction can differ for those months.
+
+## Where the rates come from
+
+The bands and relief above come from the Inland Revenue Department's [APIT tax tables](https://www.ird.gov.lk/en/publications/sitepages/apit_tax_tables.aspx?menuid=1502), which apply the Inland Revenue Act as amended. We last checked them on <strong>{formatDate(ratesFile.lastVerified)}</strong>. Tax rules can change in a budget, so always confirm with the IRD or your employer if you are unsure.
+
+## Conclusion
+
+APIT is simpler than it looks: start from your gross regular pay, take off the monthly personal relief, and tax each slice of the remainder at its band's rate. Your EPF contribution is deducted separately, and your employer adds EPF and ETF on top of your salary.
+
+Run your own numbers with the [salary and APIT calculator](/tools/salary-apit-calculator/), including the "compare two salaries" mode for a raise or a new job offer. If you are planning a big purchase, our [vehicle import duty calculator](/tools/vehicle-import-duty-calculator/) and other [Sri Lanka calculators](/tools/sri-lanka/) can help you plan too.

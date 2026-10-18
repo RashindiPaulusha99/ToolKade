@@ -1,0 +1,25 @@
+{
+  "name": "APIT tax bands (Tax Table No. 01) and EPF/ETF contribution rates",
+  "source": "https://www.ird.gov.lk/en/publications/sitepages/apit_tax_tables.aspx?menuid=1502",
+  "effectiveFrom": "2025-04-01",
+  "lastVerified": "2026-10-18",
+  "notes": "APIT: personal relief Rs. 1,800,000 a year and bands from IRD Tax Table No. 01 for Y/A 2025/2026 (https://www.ird.gov.lk/en/publications/APIT_Tax_Tables/2025-2026/Table%20-%201/02.%20APIT_2526_Table_01_Text.pdf), stored as annual bands (Inland Revenue (Amendment) Act No. 02 of 2025); the monthly table is these figures divided by 12. On 2026-10-18 the IRD APIT page listed no 2026/2027 tables. EPF (employee 8%, employer 12%) under the EPF Act No. 15 of 1958 and ETF (employer 3%) under the ETF Act No. 46 of 1980 are statutory minimum rates.",
+  "todo": [
+    "Human check: confirm with the IRD that no new APIT table applies for Y/A 2026/2027 (Budget 2026), then update lastVerified.",
+    "Human check: confirm the EPF/ETF rates against the EPF Department (Central Bank) and the ETF Board."
+  ],
+  "data": {
+    "apit": {
+      "personalReliefAnnual": 1800000,
+      "bands": [
+        { "width": 1000000, "rate": 0.06 },
+        { "width": 500000, "rate": 0.18 },
+        { "width": 500000, "rate": 0.24 },
+        { "width": 500000, "rate": 0.3 },
+        { "width": null, "rate": 0.36 }
+      ]
+    },
+    "epf": { "employeeRate": 0.08, "employerRate": 0.12 },
+    "etf": { "employerRate": 0.03 }
+  }
+}

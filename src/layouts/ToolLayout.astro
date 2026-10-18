@@ -13,7 +13,7 @@ import { getCategory } from '@/data/categories';
 import type { ToolMeta } from '@/data/tools';
 import { adsEnabled } from '@/lib/ads';
 import type { RatesFile } from '@/lib/rates';
-import { categoryUrl, toolUrl } from '@/lib/tools';
+import { categoryUrl, isPublished, toolUrl } from '@/lib/tools';
 import type { ToolContent } from '@/tools/types';
 import BaseLayout from './BaseLayout.astro';
 
@@ -25,6 +25,12 @@ interface Props {
 }
 
 const { tool, content, rates } = Astro.props;
+// AGENTS.md: coming-soon tools have no page. Fail the build rather than publish one by accident.
+if (!isPublished(tool)) {
+  throw new Error(
+    `"${tool.slug}" has status "${tool.status}"; set it to "live" or "beta" in src/data/tools.ts.`,
+  );
+}
 const category = getCategory(tool.category);
 const showSidebarAd = adsEnabled();
 ---
