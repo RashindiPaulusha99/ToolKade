@@ -1,0 +1,90 @@
+{
+  "name": "PUCSL retail electricity tariff (domestic and religious, 30-day billing cycle)",
+  "source": "https://www.pucsl.gov.lk/wp-content/uploads/2026/05/Annex-2-Approved-Tariff-Tabel_May-2026.pdf",
+  "effectiveFrom": "2026-05-11",
+  "lastVerified": "2026-10-18",
+  "notes": "Transcribed from PUCSL 'Annex 2 – Approved Tariff Table, effective from 11th May 2026' (tariff table for a 30-day billing cycle) and the PUCSL decision on electricity tariffs, May 2026. On 2026-10-18 no later tariff decision was listed on pucsl.gov.lk. Consumption bands: the bill uses the band whose upper limit (maxUnits) is not exceeded; within a band, units are charged block by block, and the fixed charge is that of the highest block the consumption reaches. PUCSL states block units are prorated by the number of days in the billing period (https://www.pucsl.gov.lk/electricity/tariff/electricity-tariff-and-charges/).",
+  "todo": [
+    "Human check: confirm with CEB/LECO whether the monthly fixed charge is also prorated for billing periods other than 30 days (the calculator does not prorate it).",
+    "Human check: confirm the same retail tariff applies to CEB and LECO postpaid customers, and whether any levy (e.g. SSCL) is added to bills.",
+    "Re-check pucsl.gov.lk for tariff revisions every quarter."
+  ],
+  "data": {
+    "billingDays": 30,
+    "tariffs": {
+      "domestic": {
+        "label": "Domestic",
+        "bands": [
+          {
+            "maxUnits": 60,
+            "blocks": [
+              { "upTo": 30, "rate": 5.0, "fixedCharge": 80 },
+              { "upTo": 60, "rate": 9.0, "fixedCharge": 210 }
+            ]
+          },
+          {
+            "maxUnits": 180,
+            "blocks": [
+              { "upTo": 60, "rate": 14.0, "fixedCharge": null },
+              { "upTo": 90, "rate": 20.0, "fixedCharge": 400 },
+              { "upTo": 120, "rate": 28.0, "fixedCharge": 1000 },
+              { "upTo": 180, "rate": 44.0, "fixedCharge": 1500 }
+            ]
+          },
+          {
+            "maxUnits": null,
+            "blocks": [
+              { "upTo": 180, "rate": 32.5, "fixedCharge": null },
+              { "upTo": null, "rate": 100.0, "fixedCharge": 2500 }
+            ]
+          }
+        ]
+      },
+      "religious": {
+        "label": "Religious & charitable",
+        "bands": [
+          {
+            "maxUnits": 180,
+            "blocks": [
+              { "upTo": 30, "rate": 4.5, "fixedCharge": 75 },
+              { "upTo": 90, "rate": 4.5, "fixedCharge": 200 },
+              { "upTo": 120, "rate": 8.0, "fixedCharge": 350 },
+              { "upTo": 180, "rate": 19.0, "fixedCharge": 1300 }
+            ]
+          },
+          {
+            "maxUnits": null,
+            "blocks": [
+              { "upTo": 180, "rate": 11.8, "fixedCharge": null },
+              { "upTo": null, "rate": 35.0, "fixedCharge": 2000 }
+            ]
+          }
+        ]
+      },
+      "domestic-prepaid": {
+        "label": "Domestic (LECO prepaid)",
+        "bands": [
+          {
+            "maxUnits": null,
+            "blocks": [
+              { "upTo": 90, "rate": 17.0, "fixedCharge": null },
+              { "upTo": null, "rate": 93.0, "fixedCharge": null }
+            ]
+          }
+        ]
+      },
+      "religious-prepaid": {
+        "label": "Religious (LECO prepaid)",
+        "bands": [
+          {
+            "maxUnits": null,
+            "blocks": [
+              { "upTo": 90, "rate": 8.0, "fixedCharge": null },
+              { "upTo": null, "rate": 36.0, "fixedCharge": null }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

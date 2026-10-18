@@ -111,10 +111,10 @@ export const tools: ToolMeta[] = [
     icon: 'Zap',
     blogSlug: 'how-ceb-electricity-bill-is-calculated',
     related: ['salary-apit-calculator', 'loan-emi-calculator', 'vehicle-import-duty-calculator'],
-    status: 'coming-soon',
+    status: 'live',
     ratesFile: 'electricity-tariff.json',
-    publishedAt: '2026-10-14',
-    updatedAt: '2026-10-14',
+    publishedAt: '2026-10-18',
+    updatedAt: '2026-10-18',
   },
   {
     slug: 'image-compressor',

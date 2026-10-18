@@ -1,0 +1,134 @@
+---
+title: 'How Your CEB Electricity Bill Is Calculated (2026 Guide)'
+description: 'Learn how your CEB or LECO electricity bill is calculated: domestic tariff blocks, the fixed charge and the 180-unit jump, with worked examples.'
+tool: electricity-bill-calculator
+category: sri-lanka
+publishDate: 2026-10-18
+updatedDate: 2026-10-18
+author: 'ToolKade Team'
+tags: ['electricity bill', 'ceb', 'leco', 'tariff', 'pucsl']
+faqs:
+  - q: 'Who sets electricity tariffs in Sri Lanka?'
+    a: 'The Public Utilities Commission of Sri Lanka (PUCSL) approves electricity tariffs, usually after a public consultation on proposals from the Ceylon Electricity Board. Revisions are published on the PUCSL website.'
+  - q: 'Why is my bill period not exactly 30 days?'
+    a: 'Meters are read on different days each month, so a billing period can be a little longer or shorter. PUCSL tariffs are set for a 30-day period and the units in each block are prorated for the actual number of days.'
+  - q: 'Does using electricity at night cost less?'
+    a: 'Only on a time-of-use tariff, which charges different rates for peak, day and off-peak hours. Most homes are on the standard block tariff, where the time of use does not change the rate.'
+  - q: 'What should I do if my bill looks wrong?'
+    a: 'Check the meter readings on the bill against your meter. If they do not match, or the bill includes an estimated reading, contact your CEB area office or LECO branch.'
+draft: true
+---
+
+import ratesFile from '@/data/rates/electricity-tariff.json';
+import { calculateBill } from '@/tools/electricity-bill-calculator/logic';
+import { formatLKR, formatDate, formatNumber } from '@/lib/format';
+
+export const rates = ratesFile.data;
+export const domestic = rates.tariffs.domestic;
+export const bill = (units) => calculateBill(units, domestic, 30, rates.billingDays);
+export const examples = [45, 110, 180, 181, 250].map(bill);
+export const lowLimit = domestic.bands[0].maxUnits;
+export const highLimit = domestic.bands[1].maxUnits;
+
+{/* TODO(human review before publishing): read through, add a local tip or example if you have one, then remove draft: true. All figures are computed from src/data/rates/electricity-tariff.json at build time. */}
+
+Your electricity bill can feel unpredictable: use a few more units and the total jumps far more than you expected. This guide explains **how your CEB electricity bill is calculated**, from the tariff blocks to the fixed charge, with worked examples. To check your own bill, use our [CEB and LECO electricity bill calculator](/tools/electricity-bill-calculator/).
+
+## Who sets the tariff?
+
+Electricity tariffs in Sri Lanka are approved by the **Public Utilities Commission of Sri Lanka (PUCSL)**. The current tariff took effect on <strong>{formatDate(ratesFile.effectiveFrom)}</strong>, and it applies to retail customers of both the **Ceylon Electricity Board (CEB)** and **Lanka Electricity Company (LECO)**.
+
+## How your CEB electricity bill is calculated
+
+Your bill has two parts: an **energy charge** for the units (kWh) you used, and a monthly **fixed charge**.
+
+### Step 1: Find your units
+
+Your units are the **current meter reading minus the previous reading**. Both readings are printed on your bill.
+
+### Step 2: Find your band
+
+The domestic tariff has different rate tables depending on your **total monthly use**:
+
+- up to <strong>{lowLimit}</strong> units a month,
+- <strong>{lowLimit + 1}–{highLimit}</strong> units a month,
+- more than <strong>{highLimit}</strong> units a month.
+
+Which table applies depends on your total, and **all** your units are then charged using that table. This is the key to understanding big jumps in your bill.
+
+### Step 3: Charge each block
+
+Within the table, units are charged in **blocks**. Here are the current domestic rates for a 30-day billing period:
+
+<table>
+  <thead>
+    <tr><th>Block</th><th>Rate per unit</th><th>Fixed charge</th></tr>
+  </thead>
+  {domestic.bands.map((band, i) => (
+    <tbody>
+      <tr>
+        <td colSpan={3}><strong>{band.maxUnits === null ? `Using more than ${highLimit} units` : i === 0 ? `Using up to ${band.maxUnits} units` : `Using ${lowLimit + 1}–${band.maxUnits} units`}</strong></td>
+      </tr>
+      {band.blocks.map((block, j) => {
+        const from = j === 0 ? 0 : band.blocks[j - 1].upTo;
+        return (
+          <tr>
+            <td>{block.upTo === null ? `Above ${from}` : `${from === 0 ? 0 : from + 1}–${block.upTo}`}</td>
+            <td>{formatLKR(block.rate)}</td>
+            <td>{block.fixedCharge === null ? '–' : formatLKR(block.fixedCharge)}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  ))}
+</table>
+
+### Step 4: Add the fixed charge
+
+The **fixed charge** depends on the highest block your usage reaches. Add it to the energy charge to get your bill.
+
+## Worked examples
+
+Here is what different households would pay in a 30-day month:
+
+<table>
+  <thead>
+    <tr><th>Units</th><th>Energy charge</th><th>Fixed charge</th><th>Total bill</th></tr>
+  </thead>
+  <tbody>
+    {examples.map((r) => (
+      <tr>
+        <td>{r.units}</td>
+        <td>{formatLKR(r.energyCharge)}</td>
+        <td>{formatLKR(r.fixedCharge)}</td>
+        <td><strong>{formatLKR(r.total)}</strong></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+### The {highLimit}-unit jump
+
+Compare <strong>{highLimit}</strong> units and <strong>{highLimit + 1}</strong> units: one extra unit raises the bill from <strong>{formatLKR(bill(highLimit).total)}</strong> to <strong>{formatLKR(bill(highLimit + 1).total)}</strong>. That is because crossing the limit moves **every** unit onto the higher rate table and raises the fixed charge. If your usage is close to a limit, cutting back a few units can save a lot.
+
+<ToolCTA slug="electricity-bill-calculator" label="Calculate your electricity bill" />
+
+## Common mistakes and tips
+
+**Looking only at the block rates.** The band you fall into changes the rate for all your units, not just the extra ones. Check where your total sits against the limits.
+
+**Ignoring the billing period.** A 33-day bill covers more units than a 30-day one, but PUCSL prorates the blocks, so the limits stretch a little too. Enter the actual number of days for an accurate estimate.
+
+**Comparing prepaid and postpaid rates directly.** LECO's optional prepaid scheme has different blocks and no fixed charge, so work out your typical monthly bill under both.
+
+**Leaving appliances on standby.** Small loads add up across a month. Switching off at the plug is an easy way to stay below a limit.
+
+## Where the rates come from
+
+All rates in this guide and in our calculator come from the PUCSL approved tariff table ([PUCSL tariff document](https://www.pucsl.gov.lk/wp-content/uploads/2026/05/Annex-2-Approved-Tariff-Tabel_May-2026.pdf)). We last checked them on <strong>{formatDate(ratesFile.lastVerified)}</strong>. Tariffs are revised from time to time, so check the PUCSL website for the latest decision.
+
+## Conclusion
+
+Your CEB or LECO bill is the energy charge for your units, worked out block by block from the rate table for your monthly total, plus a fixed charge for the highest block you reach. The biggest surprises come from crossing a limit such as {highLimit} units, which moves all your units onto higher rates.
+
+Check your bill with the [electricity bill calculator](/tools/electricity-bill-calculator/), or use its "Bill → units" mode to see how many units a bill covers. For other household budgeting, try our [salary and APIT calculator](/tools/salary-apit-calculator/) and the [loan and leasing EMI calculator](/tools/loan-emi-calculator/).

@@ -1,0 +1,76 @@
+---
+import ratesJson from '@/data/rates/electricity-tariff.json';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import { formatLKR, formatNumber } from '@/lib/format';
+import type { RatesFile } from '@/lib/rates';
+import { getTool } from '@/lib/tools';
+import type { ElectricityRates } from '@/tools/electricity-bill-calculator/logic';
+import Tool from '@/tools/electricity-bill-calculator/Tool';
+import { getContent } from '@/tools/electricity-bill-calculator/content';
+
+const tool = getTool('electricity-bill-calculator')!;
+const rates = ratesJson as RatesFile<ElectricityRates>;
+const content = getContent(rates.data);
+const domestic = rates.data?.tariffs.domestic;
+
+/** Band heading, e.g. "Using up to 60 units a month", built from the data. */
+function bandLabel(bands: NonNullable<typeof domestic>['bands'], index: number): string {
+  const band = bands[index];
+  const previous = index > 0 ? bands[index - 1].maxUnits : null;
+  if (band.maxUnits === null) return `Using more than ${formatNumber(previous ?? 0)} units a month`;
+  if (previous === null) return `Using up to ${formatNumber(band.maxUnits)} units a month`;
+  return `Using ${formatNumber(previous + 1)}–${formatNumber(band.maxUnits)} units a month`;
+}
+---
+
+<ToolLayout tool={tool} content={content} rates={rates}>
+  <Tool client:visible rates={rates.data} />
+
+  {domestic && (
+    <div slot="how-it-works" class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[20rem] text-left text-sm tabular-nums">
+        <caption class="mb-2 text-left font-semibold text-slate-900 dark:text-white">
+          Domestic tariff for a 30-day billing period (PUCSL)
+        </caption>
+        <thead>
+          <tr class="border-b border-slate-200 text-slate-600 dark:border-slate-800 dark:text-slate-400">
+            <th scope="col" class="py-2 pr-3 font-medium">
+              Block
+            </th>
+            <th scope="col" class="py-2 pr-3 text-right font-medium">
+              Rate per unit
+            </th>
+            <th scope="col" class="py-2 text-right font-medium">
+              Fixed charge
+            </th>
+          </tr>
+        </thead>
+        {domestic.bands.map((band, i) => (
+          <tbody>
+            <tr>
+              <th colspan="3" scope="colgroup" class="pt-4 pb-1 font-semibold text-slate-900 dark:text-white">
+                {bandLabel(domestic.bands, i)}
+              </th>
+            </tr>
+            {band.blocks.map((block, j) => {
+              const from = j === 0 ? 0 : (band.blocks[j - 1].upTo ?? 0);
+              return (
+                <tr class="border-b border-slate-200 dark:border-slate-800">
+                  <th scope="row" class="py-2 pr-3 font-normal">
+                    {block.upTo === null
+                      ? `Above ${formatNumber(from)} units`
+                      : `${formatNumber(from === 0 ? 0 : from + 1)}–${formatNumber(block.upTo)} units`}
+                  </th>
+                  <td class="py-2 pr-3 text-right">{formatLKR(block.rate)}</td>
+                  <td class="py-2 text-right">
+                    {block.fixedCharge === null ? '–' : formatLKR(block.fixedCharge)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        ))}
+      </table>
+    </div>
+  )}
+</ToolLayout>
